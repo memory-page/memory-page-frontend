@@ -1,24 +1,24 @@
 import React from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import LoginForm from "./components/LoginForm";
+import SignUpForm from "./components/SignUpForm";
 import backgroundImg from "../../assets/background.png";
 import Title from "../../components/Title"
 
-const LoginPage: React.FC = () => {
+const SignUpPage: React.FC = () => {
 	return (
-		<LoginContainer>
+		<SignUpContainer>
       <Title/>
-			<LoginForm />
+			<SignUpForm />
 			<Footer>
-				<StyledLink to="/signup">칠판을 만들고 싶나요? 회원가입하러 가기</StyledLink>
+				<StyledLink to="/login">칠판을 확인하고 싶나요? 로그인하러 가기</StyledLink>
 			</Footer>
-		</LoginContainer>
+		</SignUpContainer>
 	);
 };
 
 // Styled Components
-const LoginContainer = styled.div`
+const SignUpContainer = styled.div`
   height: 100%;
     display: flex;
     flex-direction: column;
@@ -43,4 +43,4 @@ const StyledLink = styled(Link)`
     color: white;
 `;
 
-export default LoginPage;
+export default SignUpPage;

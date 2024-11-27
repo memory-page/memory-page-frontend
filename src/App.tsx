@@ -6,7 +6,8 @@ import theme from "./utils/theme"
 
 //Pages
 import LoginPage from "./pages/Auth/LoginPage";
-import MainPage from "./pages/Main/mainPage";
+import SignUpPage from "./pages/Auth/SignUpPage";
+import MainPage from "./pages/Main/MainPage";
 
 interface RouteConfig {
   element: JSX.Element;
@@ -17,7 +18,8 @@ interface RouteConfig {
 function App(): JSX.Element {
   const routes: RouteConfig[] = [
     {path: "/", element: <MainPage/>},
-    {path: "/login", element: <LoginPage/>}
+    {path: "/login", element: <LoginPage/>},
+    {path: "/signup", element: <SignUpPage/>}
   ];
 
   return(
