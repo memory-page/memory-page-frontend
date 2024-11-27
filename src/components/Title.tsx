@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
-import stickerImg from "../assets/sticker.png"
+import stickerImg from "../assets/sticker.png";
+import {Link} from "react-router-dom";
 
 const Title: React.FC = () => {
 	return (
@@ -9,7 +10,7 @@ const Title: React.FC = () => {
           <Sticker src={stickerImg} alt="스티커 이미지" />
           <Subtitle>당신에게 전 어떤 친구였나요?</Subtitle>
         </SubtitleContainer>
-        <MainTitle>
+        <MainTitle to="/">
           <WhiteText>추억의</WhiteText> <HighlightText>칠판</HighlightText>
         </MainTitle>
 			</Header>
@@ -19,9 +20,11 @@ const Title: React.FC = () => {
 const Header = styled.div`
   margin: 100px;
     text-align: center;
+    display: flex;
+    flex-direction: column;
 `;
 
-const MainTitle = styled.h1`  
+const MainTitle = styled(Link)`  
   font-size: 36px;
   color: #ffa726; /* 제목 색상 */
   margin: 10px 0;
