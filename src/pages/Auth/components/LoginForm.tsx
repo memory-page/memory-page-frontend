@@ -1,7 +1,6 @@
 import React, { useState, FormEvent } from "react";
 import styled from "styled-components";
-import HighlightOffOutlinedIcon from "@mui/icons-material/HighlightOffOutlined";
-import { Button, IconButton, TextField } from "@mui/material";
+import { Button, TextField } from "@mui/material";
 
 const LoginForm: React.FC = () => {
   const [id, setId] = useState("");
@@ -34,7 +33,7 @@ const LoginForm: React.FC = () => {
           onChange={(e) => setPassword(e.target.value)}
         />
       </TextFieldContainer>
-      <SubmitButton variant="contained" type="submit">
+      <SubmitButton variant="contained" type="button" onClick={()=>{}}>
         칠판 확인하기
       </SubmitButton>
       {loginError && <ErrorText>{loginError}</ErrorText>}
@@ -79,16 +78,17 @@ const LoginTextField = styled(TextField)`
 
 const SubmitButton = styled(Button)`
   && {
+    width: 200px;
+    margin: 10px;
     color: #013C24;
     border-radius: 30px;
-    width: 100%;
     max-width: 350px;
     background: white;
     font-size: 16px;
     padding: 10px;
     text-transform: none;
     &:hover {
-      background: #255080;
+      background: #f0f0f0;
     }
   }
 `;
