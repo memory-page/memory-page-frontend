@@ -20,15 +20,15 @@ const SignUpPage: React.FC = () => {
 // Styled Components
 const SignUpContainer = styled.div`
   height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: white;
 
-    background-image: url(${backgroundImg});
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
+  background-image: url(${backgroundImg});
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 `;
 
 const Footer = styled.div`
