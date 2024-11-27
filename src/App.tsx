@@ -1,25 +1,12 @@
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import styled from "styled-components";
-import { createTheme, ThemeProvider } from "@mui/material";
-import LoginPage from "./pages/Auth/LoginPage";
+import { ThemeProvider } from "@mui/material";
+import GlobalStyle from "./utils/GlobalStyles";
+import theme from "./utils/theme"
 
-const theme = createTheme({
-  typography: {
-    fontFamily: "Moneygraphy-Rounded",
-  },
-  components: {
-    MuiInputLabel: {
-      styleOverrides: {
-        root: {
-          color: "white", // 기본 색상
-          "&.Mui-focused": {
-            color: "white", // 포커스 상태에서 흰색으로 변경
-          },
-        },
-      },
-    },
-  },
-});
+//Pages
+import LoginPage from "./pages/Auth/LoginPage";
+import MainPage from "./pages/Main/mainPage";
 
 interface RouteConfig {
   element: JSX.Element;
@@ -29,11 +16,13 @@ interface RouteConfig {
 
 function App(): JSX.Element {
   const routes: RouteConfig[] = [
-    {path: "/", element: <LoginPage/>},
+    {path: "/", element: <MainPage/>},
+    {path: "/login", element: <LoginPage/>}
   ];
 
   return(
     <ThemeProvider theme={theme}>
+      <GlobalStyle/>
       <Container>
         <Routes>
           {
