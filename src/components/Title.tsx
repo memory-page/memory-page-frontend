@@ -18,10 +18,10 @@ const Title: React.FC = () => {
 };
 
 const Header = styled.div`
-  margin: 100px;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
+  margin: 100px 100px 50px 100px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
 `;
 
 const MainTitle = styled(Link)`  
