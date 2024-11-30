@@ -30,7 +30,7 @@ const CreatePage = () => {
     dots: true,
     infinite: true,
     speed: 500,
-    slidesToShow: 3,
+    slidesToShow: 4,
     slidesToScroll: 1,
   };
 
@@ -102,7 +102,7 @@ const BackgroundSlide = styled.div`
   position: absolute;
   bottom: 0;
   width: 100%;
-  height: 245px;
+  height: 200px;
   padding-left: 32px;
   padding-right: 33px;
   padding-top: 20px;
@@ -129,7 +129,7 @@ const SlideItem = styled.div`
   align-items: center;
 
   img {
-    width: 99%;
+    width: 98%;
     height: auto;
     border-radius: 8px;
     transition: transform 0.3s ease;
