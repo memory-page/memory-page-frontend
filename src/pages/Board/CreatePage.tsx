@@ -14,16 +14,34 @@ import bg2 from '../../assets/bg-2.png';
 import bg3 from '../../assets/bg-3.png';
 import bg4 from '../../assets/bg-4.png';
 import bg5 from '../../assets/bg-5.png';
+import axios from 'axios';
+import UserInfo from '../../store/UserInfo';
+import { useNavigate } from 'react-router-dom';
 
-const backgroundImages = [backgroundImg, bg1, bg2, bg3, bg4, bg5, bg5, bg5];
+const backgroundImages = [
+  { img: backgroundImg, num: 0 },
+  { img: bg1, num: 1 },
+  { img: bg2, num: 2 },
+  { img: bg3, num: 3 },
+  { img: bg4, num: 4 },
+  { img: bg5, num: 5 },
+];
+
+interface IUserInfo {
+  board_name: string;
+  password: string;
+  bg_num: number;
+  graduated_at: string;
+}
 
 const CreatePage = () => {
-  const [selectedBackground, setSelectedBackground] = useState(
-    backgroundImages[0]
-  );
+  const navigate = useNavigate();
 
+  const [selectedBackground, setSelectedBackground] = useState(
+    backgroundImages[0].img
+  );
   const handleBackgroundChange = (image: string) => {
-    setSelectedBackground(image); // 상태를 클릭한 이미지로 업데이트
+    setSelectedBackground(image);
   };
 
   const sliderSettings = {
@@ -34,14 +52,37 @@ const CreatePage = () => {
     slidesToScroll: 1,
   };
 
+  const [bgNum, setBgNum] = useState(backgroundImages[0].num);
+  const handleBgNum = (num: number) => {
+    setBgNum(num);
+  };
+
+  // const board_name = UserInfo((info) => info.board_name);
+  // const password = UserInfo((info) => info.password);
+  const boardName = '지우';
+  const password = '0727';
+  const graduatedAt = '2024-12-01';
+  // const graduated_at = UserInfo((info) => info.graduated_at);
+
+  const userInfo: IUserInfo = {
+    board_name: boardName,
+    password: password,
+    bg_num: bgNum,
+    graduated_at: graduatedAt,
+  };
+
+  const fetchBoard = () => {
+    axios.post('http://220.69.209.126:5012/board', userInfo).then((res) => {});
+  };
+
   return (
     <CreateContainer background={selectedBackground}>
       <Header>
         <CancelButton>
-          <FontAwesomeIcon icon={faCircleXmark} />
+          <FontAwesomeIcon icon={faCircleXmark} onClick={() => navigate(-1)} />
         </CancelButton>
         <SubmitButton>
-          <FontAwesomeIcon icon={faCircleCheck} />
+          <FontAwesomeIcon icon={faCircleCheck} onClick={() => fetchBoard} />
         </SubmitButton>
       </Header>
       <BackgroundSlide>
@@ -50,11 +91,12 @@ const CreatePage = () => {
             <SlideItem
               key={index}
               onClick={() => {
-                handleBackgroundChange(image);
-                console.log(selectedBackground);
+                handleBackgroundChange(image.img);
+                handleBgNum(image.num);
+                console.log(userInfo);
               }}
             >
-              <img src={image} alt={`bg${index + 1}`} />
+              <img src={image.img} alt={`bg${index + 1}`} />
             </SlideItem>
           ))}
         </Slider>
@@ -89,6 +131,7 @@ const CancelButton = styled.div`
   font-size: 45px;
   color: #d9d9d9;
   opacity: 0.7;
+  cursor: pointer;
 `;
 
 const SubmitButton = styled.div`
@@ -98,6 +141,7 @@ const SubmitButton = styled.div`
   font-size: 45px;
   color: #d9d9d9;
   opacity: 0.7;
+  cursor: pointer;
 `;
 
 const BackgroundSlide = styled.div`
