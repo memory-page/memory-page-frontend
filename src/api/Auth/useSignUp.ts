@@ -24,7 +24,7 @@ const useSignUp = () => {
         bg_num,
         graduated_at,
 			};
-			await axios.post(`${apiUrl}/users/signup`, requestData)
+			await axios.post(`${apiUrl}/board`, requestData)
         .then(() => navigate("/")) 
 		} catch(error) {
       if (axios.isAxiosError(error)) {
