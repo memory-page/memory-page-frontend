@@ -17,6 +17,7 @@ import bg5 from '../../assets/bg-5.png';
 import axios from 'axios';
 import UserInfo from '../../store/UserInfo';
 import { useNavigate } from 'react-router-dom';
+import useCreate from '../../api/Board/useCreate';
 
 const backgroundImages = [
   { img: backgroundImg, num: 0 },
@@ -36,6 +37,7 @@ interface IUserInfo {
 
 const CreatePage = () => {
   const navigate = useNavigate();
+  const create = useCreate();
 
   const [selectedBackground, setSelectedBackground] = useState(
     backgroundImages[0].img
@@ -71,18 +73,24 @@ const CreatePage = () => {
     graduated_at: graduatedAt,
   };
 
-  const fetchBoard = () => {
-    axios.post('http://220.69.209.126:5012/board', userInfo).then((res) => {});
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+    try {
+      await create(boardName, password, bgNum, graduatedAt);
+      console.log('create 잘 실행');
+    } catch (error) {
+      console.log('회원가입 중 오류 발생:', error);
+    }
   };
 
   return (
-    <CreateContainer background={selectedBackground}>
+    <CreateContainer $background={selectedBackground}>
       <Header>
         <CancelButton>
           <FontAwesomeIcon icon={faCircleXmark} onClick={() => navigate(-1)} />
         </CancelButton>
         <SubmitButton>
-          <FontAwesomeIcon icon={faCircleCheck} onClick={() => fetchBoard} />
+          <FontAwesomeIcon icon={faCircleCheck} onClick={handleSubmit} />
         </SubmitButton>
       </Header>
       <BackgroundSlide>
@@ -106,13 +114,13 @@ const CreatePage = () => {
 };
 export default CreatePage;
 
-const CreateContainer = styled.div<{ background: string }>`
+const CreateContainer = styled.div<{ $background: string }>`
   height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   color: white;
-  background-image: url(${(props) => props.background});
+  background-image: url(${(props) => props.$background});
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
