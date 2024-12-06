@@ -4,8 +4,13 @@ import { useNavigate } from "react-router-dom";
 interface SignUpRequest {
   board_name: string,
   password: string,
-  bg_num: number,
-  graduated_at: string
+}
+
+interface SignUpResponse {
+  detail: string;
+  data: {
+    board_id: string;
+  };
 }
 
 const useSignUp = () => {
@@ -14,18 +19,17 @@ const useSignUp = () => {
 	const signUp = async (
     board_name: string,
     password: string,
-    bg_num: number = 0,
-    graduated_at: string = new Date().toISOString(),
 	): Promise<void> => {
 		try {
 			const requestData: SignUpRequest = {
         board_name,
         password,
-        bg_num,
-        graduated_at,
 			};
-			await axios.post(`${apiUrl}/board`, requestData)
-        .then(() => navigate("/")) 
+      const response = await axios.post<SignUpResponse>(`${apiUrl}/board/validate`, requestData);
+      
+			console.log("valid 통과", response.data);
+
+      navigate('/board/create');
 		} catch(error) {
       if (axios.isAxiosError(error)) {
         const message =

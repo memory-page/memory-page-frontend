@@ -15,7 +15,7 @@ import bg3 from '../../assets/bg-3.png';
 import bg4 from '../../assets/bg-4.png';
 import bg5 from '../../assets/bg-5.png';
 import axios from 'axios';
-import UserInfo from '../../store/UserInfo';
+import useUserInfo from '../../store/UserInfo';
 import { useNavigate } from 'react-router-dom';
 import useCreate from '../../api/Board/useCreate';
 
@@ -59,24 +59,19 @@ const CreatePage = () => {
     setBgNum(num);
   };
 
-  // const board_name = UserInfo((info) => info.board_name);
-  // const password = UserInfo((info) => info.password);
-  const boardName = '지우';
-  const password = '0727';
-  const graduatedAt = '2024-12-01';
-  // const graduated_at = UserInfo((info) => info.graduated_at);
+  const {board_name, password, graduated_at} = useUserInfo();
 
   const userInfo: IUserInfo = {
-    board_name: boardName,
+    board_name: board_name,
     password: password,
     bg_num: bgNum,
-    graduated_at: graduatedAt,
+    graduated_at: graduated_at,
   };
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     try {
-      await create(boardName, password, bgNum, graduatedAt);
+      await create(board_name, password, bgNum, graduated_at);
       console.log('create 잘 실행');
     } catch (error) {
       console.log('회원가입 중 오류 발생:', error);
