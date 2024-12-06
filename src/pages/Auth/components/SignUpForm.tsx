@@ -4,6 +4,7 @@ import { Button, TextField } from "@mui/material";
 import useSignUp from "../../../api/Auth/useSignUp";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import useUserInfo from '../../../store/UserInfo';
 
 const SignUpForm: React.FC = () => {
   const [id, setId] = useState("");
@@ -11,6 +12,7 @@ const SignUpForm: React.FC = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [graduationDate, setGraduationDate] = useState<Date | null>(new Date());
   const [signUpError, setSignUpError] = useState("");
+  const { setBoardName, setPassword: setStorePassword, setGraduatedAt } = useUserInfo();
   const signUp = useSignUp();
 
   const handleDateChange = (date: Date | null) => {
@@ -19,12 +21,27 @@ const SignUpForm: React.FC = () => {
 
   const handleSubmit = async () => {
     setSignUpError(""); 
+    if (!id){
+      setSignUpError("닉네임을 입력해주세요");
+      return;
+    }
+    if (!password) {
+      setSignUpError("비밀번호는 ")
+    }
     if (!graduationDate) {
       setSignUpError("졸업 날짜를 선택해주세요!");
       return;
     }
     try{
-      await signUp(id, password, 0, graduationDate.toISOString().split("T")[0]);
+
+      setBoardName(id);
+      setStorePassword(password);
+      setGraduatedAt(graduationDate.toISOString().split('T')[0]);
+
+      console.log('데이터 저장 완료:', {id, password, graduationDate});
+
+      await signUp(id, password);
+      console.log(id, password, graduationDate);
     } catch (error) {
       console.log("회원가입 중 오류 발생:", error);
     }
