@@ -6,6 +6,7 @@ import bg3 from '../../assets/bg-3.png';
 import bg4 from '../../assets/bg-4.png';
 import bg5 from '../../assets/bg-5.png';
 import useUserInfo from '../../store/UserInfo';
+import { useNavigate } from 'react-router-dom';
 
 const backgroundImages = [
   { img: backgroundImg, num: 0 },
@@ -18,6 +19,7 @@ const backgroundImages = [
 
 const BoardPage = () => {
   const { board_name } = useUserInfo();
+  const navigate = useNavigate();
   return (
     <BoardConatainer $background={bg2}>
       <BoardHeader>
@@ -26,8 +28,22 @@ const BoardPage = () => {
 
       <BoardFooter>
         <Button>
-          <button className='login_button'>로그인 화면으로 돌아가기기</button>
-          <button className='share_button'>칠판 공유하러 가기</button>
+          <button
+            className='login_button'
+            onClick={() => {
+              navigate('/login');
+            }}
+          >
+            로그인 화면으로 돌아가기기
+          </button>
+          <button
+            className='share_button'
+            onClick={() => {
+              navigate('/share');
+            }}
+          >
+            칠판 공유하러 가기
+          </button>
         </Button>
       </BoardFooter>
     </BoardConatainer>

@@ -1,39 +1,38 @@
-import React, { useState, FormEvent } from "react";
-import styled from "styled-components";
-import { Button, TextField } from "@mui/material";
+import React, { useState, FormEvent } from 'react';
+import styled from 'styled-components';
+import { Button, TextField } from '@mui/material';
 
 const LoginForm: React.FC = () => {
-  const [id, setId] = useState("");
-  const [password, setPassword] = useState("");
-  const [loginError, setLoginError] = useState("");
+  const [id, setId] = useState('');
+  const [password, setPassword] = useState('');
+  const [loginError, setLoginError] = useState('');
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setLoginError(""); // 에러 초기화
+    setLoginError(''); // 에러 초기화
   };
 
   return (
     <LoginFormBox onSubmit={handleSubmit}>
       <TextFieldContainer>
         <LoginTextField
-          type="text"
-          variant="filled"
-          label="닉네임"
-          
+          type='text'
+          variant='filled'
+          label='닉네임'
           value={id}
           onChange={(e) => setId(e.target.value)}
         />
       </TextFieldContainer>
       <TextFieldContainer>
         <LoginTextField
-          variant="filled"
-          label="비밀번호"
-          type="password"
+          variant='filled'
+          label='비밀번호'
+          type='password'
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
       </TextFieldContainer>
-      <SubmitButton variant="contained" type="button" onClick={()=>{}}>
+      <SubmitButton variant='contained' type='button' onClick={() => {}}>
         칠판 확인하기
       </SubmitButton>
       {loginError && <ErrorText>{loginError}</ErrorText>}
@@ -41,7 +40,6 @@ const LoginForm: React.FC = () => {
   );
 };
 
-// Styled Components
 const LoginFormBox = styled.form`
   display: flex;
   flex-direction: column;
@@ -61,7 +59,7 @@ const TextFieldContainer = styled.div`
 
   /* 하단 흰 줄 */
   &::after {
-    content: "";
+    content: '';
     position: absolute;
     bottom: 0;
     left: 0;
@@ -80,7 +78,7 @@ const SubmitButton = styled(Button)`
   && {
     width: 200px;
     margin: 10px;
-    color: #013C24;
+    color: #013c24;
     border-radius: 30px;
     max-width: 350px;
     background: white;
