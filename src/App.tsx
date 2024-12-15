@@ -10,6 +10,7 @@ import SignUpPage from './pages/Auth/SignUpPage';
 import MainPage from './pages/Main/MainPage';
 import SharePage from './pages/Share/SharePage';
 import CreatePage from './pages/Board/CreatePage';
+import MyPage from './pages/Board/MyPage';
 
 interface RouteConfig {
   element: JSX.Element;
@@ -24,6 +25,7 @@ function App(): JSX.Element {
     { path: '/signup', element: <SignUpPage /> },
     { path: '/share', element: <SharePage /> },
     { path: '/board/create', element: <CreatePage /> },
+    { path: '/board', element: <MyPage />},
   ];
 
   return (

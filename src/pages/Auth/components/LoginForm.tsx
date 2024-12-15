@@ -1,15 +1,29 @@
 import React, { useState, FormEvent } from "react";
 import styled from "styled-components";
 import { Button, TextField } from "@mui/material";
+import useLogin from "../../../api/Auth/useLogin";
 
 const LoginForm: React.FC = () => {
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
   const [loginError, setLoginError] = useState("");
+  const login = useLogin();
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setLoginError(""); // 에러 초기화
+  const handleSubmit = async () => {
+    setLoginError(""); 
+    if (!id){
+      setLoginError("닉네임을 입력해주세요");
+      return;
+    }
+    if (!password) {
+      setLoginError("비밀번호를 입력해주세요")
+    }
+    try{
+      await login(id, password);
+    } catch (error) {
+      console.log("로그인 중 오류 발생:", error);
+    }
+
   };
 
   return (
@@ -33,7 +47,7 @@ const LoginForm: React.FC = () => {
           onChange={(e) => setPassword(e.target.value)}
         />
       </TextFieldContainer>
-      <SubmitButton variant="contained" type="button" onClick={()=>{}}>
+      <SubmitButton variant="contained" type="button" onClick={handleSubmit}>
         칠판 확인하기
       </SubmitButton>
       {loginError && <ErrorText>{loginError}</ErrorText>}
