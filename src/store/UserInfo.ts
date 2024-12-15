@@ -1,20 +1,21 @@
 import { create } from 'zustand';
 
-const UserInfo = create((set) => ({
-  board_name: '어드민',
-  password: '1234',
-  bg_num: 0,
-  graduated_at: '2024-11-30',
+interface UserInfoState {
+  board_name: string;
+  password: string;
+  graduated_at: string;
+  setBoardName: (name: string) => void;
+  setPassword: (password: string) => void;
+  setGraduatedAt: (date: string) => void;
+}
 
-  setBoardName: (newBoardName: string) =>
-    set(() => ({ board_name: newBoardName })),
-
-  setPassword: (newPassword: string) => set(() => ({ password: newPassword })),
-
-  setBgNum: (newBgNum: number) => set(() => ({ bg_num: newBgNum })),
-
-  setGraduatedAt: (newGraduatedAt: string) =>
-    set(() => ({ graduated_at: newGraduatedAt })),
+const useUserInfo = create<UserInfoState>((set) => ({
+  board_name: '',
+  password: '',
+  graduated_at: '',
+  setBoardName: (name) => set(() => ({ board_name: name })),
+  setPassword: (password) => set(() => ({ password })),
+  setGraduatedAt: (date) => set(() => ({ graduated_at: date })),
 }));
 
-export default UserInfo;
+export default useUserInfo;
