@@ -32,12 +32,10 @@ const useSignUp = () => {
       navigate('/board/create');
 		} catch(error) {
       if (axios.isAxiosError(error)) {
-        const message =
-          error.response?.data?.message || "회원가입에 실패했습니다.";
-        alert(message);
+        const detailMessage = error.response?.data?.detail || "알 수 없는 오류가 발생했습니다.";
+        throw new Error(detailMessage); // 에러를 throw하여 상위 컴포넌트에서 처리
       } else {
-        console.error("예상치 못한 오류:", error);
-        alert("예상치 못한 오류가 발생했습니다.");
+        throw new Error("예상치 못한 오류가 발생했습니다.");
       }
     }
 	};

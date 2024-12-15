@@ -19,37 +19,46 @@ const SignUpForm: React.FC = () => {
     if (date) setGraduationDate(date);
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     setSignUpError(""); 
     if (!id){
       setSignUpError("닉네임을 입력해주세요");
       return;
     }
-    if (!password) {
-      setSignUpError("비밀번호는 ")
+    else if (!password) {
+      setSignUpError("비밀번호를 입력해주세요")
     }
-    if (!graduationDate) {
+    else if (confirmPassword!=password) {
+      setSignUpError("비밀번호가 일치하지 않습니다")
+    }
+    else if (!graduationDate) {
       setSignUpError("졸업 날짜를 선택해주세요!");
       return;
     }
-    try{
+    else{
+      try{
 
-      setBoardName(id);
-      setStorePassword(password);
-      setGraduatedAt(graduationDate.toISOString().split('T')[0]);
+        setBoardName(id);
+        setStorePassword(password);
+        setGraduatedAt(graduationDate.toISOString().split('T')[0]);
 
-      console.log('데이터 저장 완료:', {id, password, graduationDate});
+        console.log('데이터 저장 완료:', {id, password, graduationDate});
 
-      await signUp(id, password);
-      console.log(id, password, graduationDate);
-    } catch (error) {
-      console.log("회원가입 중 오류 발생:", error);
+        await signUp(id, password);
+        console.log(id, password, graduationDate);
+      } catch (error) {
+        if(error instanceof Error){
+          setSignUpError(error.message);
+        } else {
+          setSignUpError("예상치 못한 오류가 발생했습니다.");
+        }
+      }
     }
-
   };
 
   return (
-    <SignUpFormBox>
+    <SignUpFormBox onSubmit={handleSubmit}>
       <TextFieldContainer>
         <SignUpTextField
           type="text"
@@ -89,15 +98,15 @@ const SignUpForm: React.FC = () => {
           />
         </StyledDatePickerWrapper>
       </TextFieldContainer>
-      <SubmitButton onClick={handleSubmit}>
+      <SubmitButton variant="contained" type="submit">
         칠판 만들기
       </SubmitButton>
-      {signUpError && <ErrorText>{signUpError}</ErrorText>}
+      {<ErrorText>{signUpError || " "}</ErrorText>}
     </SignUpFormBox>
   );
 };
 
-const SignUpFormBox = styled.div`
+const SignUpFormBox = styled.form`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -107,8 +116,7 @@ const SignUpFormBox = styled.div`
 const TextFieldContainer = styled.div`
   display: flex;
   align-items: center;
-  width: 100%;
-  max-width: 350px;
+  width: 226px;
   margin-bottom: 16px;
   border-radius: 8px;
   position: relative;
@@ -169,6 +177,7 @@ const ErrorText = styled.div`
   font-size: 0.875rem;
   text-align: center;
   margin-top: 8px;
+  min-height: 1.2rem;
 `;
 
 export default SignUpForm;

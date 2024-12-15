@@ -9,7 +9,8 @@ const LoginForm: React.FC = () => {
   const [loginError, setLoginError] = useState("");
   const login = useLogin();
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     setLoginError(""); 
     if (!id){
       setLoginError("닉네임을 입력해주세요");
@@ -21,7 +22,11 @@ const LoginForm: React.FC = () => {
     try{
       await login(id, password);
     } catch (error) {
-      console.log("로그인 중 오류 발생:", error);
+      if(error instanceof Error){
+        setLoginError(error.message);
+      } else {
+        setLoginError("예상치 못한 오류가 발생했습니다.");
+      }
     }
 
   };
@@ -47,7 +52,7 @@ const LoginForm: React.FC = () => {
           onChange={(e) => setPassword(e.target.value)}
         />
       </TextFieldContainer>
-      <SubmitButton variant="contained" type="button" onClick={handleSubmit}>
+      <SubmitButton variant="contained" type="submit">
         칠판 확인하기
       </SubmitButton>
       {loginError && <ErrorText>{loginError}</ErrorText>}
