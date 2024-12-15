@@ -11,7 +11,7 @@ const LoginForm: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setLoginError(""); 
+    setLoginError(" "); 
     if (!id){
       setLoginError("닉네임을 입력해주세요");
       return;
@@ -55,7 +55,7 @@ const LoginForm: React.FC = () => {
       <SubmitButton variant="contained" type="submit">
         칠판 확인하기
       </SubmitButton>
-      {loginError && <ErrorText>{loginError}</ErrorText>}
+      {<ErrorText>{loginError || " "}</ErrorText>}
     </LoginFormBox>
   );
 };
@@ -117,6 +117,7 @@ const ErrorText = styled.div`
   font-size: 0.875rem;
   text-align: center;
   margin-top: 8px;
+  min-height: 1.2rem;
 `;
 
 const StatusText = styled.div`
