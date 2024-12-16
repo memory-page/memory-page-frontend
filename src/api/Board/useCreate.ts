@@ -29,8 +29,8 @@ const useCreate = () => {
       };
       const response = await axios.post(`${apiUrl}/board`, requestData);
 
-      console.log('칠판 아이디:', response.data.data);
-      setID(response.data.data);
+      console.log('칠판 아이디:', response.data.data.board_id);
+      setID(response.data.data.board_id);
       navigate('/share');
 
       console.log('통신성공');

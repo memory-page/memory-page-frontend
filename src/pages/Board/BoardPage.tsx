@@ -7,6 +7,7 @@ import bg4 from '../../assets/bg-4.png';
 import bg5 from '../../assets/bg-5.png';
 import useUserInfo from '../../store/UserInfo';
 import { useNavigate } from 'react-router-dom';
+import { Cookies } from 'react-cookie';
 
 const backgroundImages = [
   { img: backgroundImg, num: 0 },
@@ -18,8 +19,9 @@ const backgroundImages = [
 ];
 
 const BoardPage = () => {
-  const { board_name } = useUserInfo();
+  const { board_name, setID } = useUserInfo();
   const navigate = useNavigate();
+  const cookies = new Cookies();
   return (
     <BoardConatainer $background={bg2}>
       <BoardHeader>
@@ -31,10 +33,12 @@ const BoardPage = () => {
           <button
             className='login_button'
             onClick={() => {
+              cookies.remove('access_token', { path: '/' });
+              setID('');
               navigate('/login');
             }}
           >
-            로그인 화면으로 돌아가기기
+            로그인 화면으로 돌아가기
           </button>
           <button
             className='share_button'

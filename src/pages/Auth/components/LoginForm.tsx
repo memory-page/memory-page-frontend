@@ -2,9 +2,10 @@ import React, { useState, FormEvent } from 'react';
 import styled from 'styled-components';
 import { Button, TextField } from '@mui/material';
 import useLogin from '../../../api/Auth/useLogin';
+import useUserInfo from '../../../store/UserInfo';
 
 const LoginForm: React.FC = () => {
-  const [id, setId] = useState('');
+  const [userId, setUserId] = useState('');
   const [password, setPassword] = useState('');
   const [loginError, setLoginError] = useState('');
   const login = useLogin();
@@ -12,7 +13,7 @@ const LoginForm: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoginError(' ');
-    if (!id) {
+    if (!userId) {
       setLoginError('닉네임을 입력해주세요');
       return;
     }
@@ -20,7 +21,7 @@ const LoginForm: React.FC = () => {
       setLoginError('비밀번호를 입력해주세요');
     }
     try {
-      await login(id, password);
+      await login(userId, password);
     } catch (error) {
       if (error instanceof Error) {
         setLoginError(error.message);
@@ -30,6 +31,8 @@ const LoginForm: React.FC = () => {
     }
   };
 
+  // const { id } = useUserInfo();
+
   return (
     <LoginFormBox onSubmit={handleSubmit}>
       <TextFieldContainer>
@@ -37,8 +40,8 @@ const LoginForm: React.FC = () => {
           type='text'
           variant='filled'
           label='닉네임'
-          value={id}
-          onChange={(e) => setId(e.target.value)}
+          value={userId}
+          onChange={(e) => setUserId(e.target.value)}
         />
       </TextFieldContainer>
       <TextFieldContainer>
