@@ -8,7 +8,7 @@ import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { useState } from 'react';
-import backgroundImg from '../../assets/background.png';
+import bg0 from '../../assets/bg-0.png';
 import bg1 from '../../assets/bg-1.png';
 import bg2 from '../../assets/bg-2.png';
 import bg3 from '../../assets/bg-3.png';
@@ -20,7 +20,7 @@ import { useNavigate } from 'react-router-dom';
 import useCreate from '../../api/Board/useCreate';
 
 const backgroundImages = [
-  { img: backgroundImg, num: 0 },
+  { img: bg0, num: 0 },
   { img: bg1, num: 1 },
   { img: bg2, num: 2 },
   { img: bg3, num: 3 },
@@ -59,7 +59,7 @@ const CreatePage = () => {
     setBgNum(num);
   };
 
-  const {board_name, password, graduated_at} = useUserInfo();
+  const { board_name, password, graduated_at } = useUserInfo();
 
   const userInfo: IUserInfo = {
     board_name: board_name,

@@ -1,66 +1,66 @@
-import React, { useState, FormEvent } from "react";
-import styled from "styled-components";
-import { Button, TextField } from "@mui/material";
-import useLogin from "../../../api/Auth/useLogin";
+import React, { useState, FormEvent } from 'react';
+import styled from 'styled-components';
+import { Button, TextField } from '@mui/material';
+import useLogin from '../../../api/Auth/useLogin';
+import useUserInfo from '../../../store/UserInfo';
 
 const LoginForm: React.FC = () => {
-  const [id, setId] = useState("");
-  const [password, setPassword] = useState("");
-  const [loginError, setLoginError] = useState("");
+  const [userId, setUserId] = useState('');
+  const [password, setPassword] = useState('');
+  const [loginError, setLoginError] = useState('');
   const login = useLogin();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setLoginError(" "); 
-    if (!id){
-      setLoginError("닉네임을 입력해주세요");
+    setLoginError(' ');
+    if (!userId) {
+      setLoginError('닉네임을 입력해주세요');
       return;
     }
     if (!password) {
-      setLoginError("비밀번호를 입력해주세요")
+      setLoginError('비밀번호를 입력해주세요');
     }
-    try{
-      await login(id, password);
+    try {
+      await login(userId, password);
     } catch (error) {
-      if(error instanceof Error){
+      if (error instanceof Error) {
         setLoginError(error.message);
       } else {
-        setLoginError("예상치 못한 오류가 발생했습니다.");
+        setLoginError('예상치 못한 오류가 발생했습니다.');
       }
     }
-
   };
+
+  // const { id } = useUserInfo();
 
   return (
     <LoginFormBox onSubmit={handleSubmit}>
       <TextFieldContainer>
         <LoginTextField
-          type="text"
-          variant="filled"
-          label="닉네임"
-          
-          value={id}
-          onChange={(e) => setId(e.target.value)}
+          type='text'
+          variant='filled'
+          label='닉네임'
+          value={userId}
+          onChange={(e) => setUserId(e.target.value)}
         />
       </TextFieldContainer>
       <TextFieldContainer>
         <LoginTextField
-          variant="filled"
-          label="비밀번호"
-          type="password"
+          variant='filled'
+          label='비밀번호'
+          type='password'
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
       </TextFieldContainer>
-      <SubmitButton variant="contained" type="submit">
+      <SubmitButton variant='contained' type='submit'>
         칠판 확인하기
       </SubmitButton>
-      {<ErrorText>{loginError || " "}</ErrorText>}
+      {<ErrorText>{loginError || ' '}</ErrorText>}
     </LoginFormBox>
   );
 };
 
-// Styled Components
 const LoginFormBox = styled.form`
   display: flex;
   flex-direction: column;
@@ -80,7 +80,7 @@ const TextFieldContainer = styled.div`
 
   /* 하단 흰 줄 */
   &::after {
-    content: "";
+    content: '';
     position: absolute;
     bottom: 0;
     left: 0;
@@ -99,7 +99,7 @@ const SubmitButton = styled(Button)`
   && {
     width: 200px;
     margin: 10px;
-    color: #013C24;
+    color: #013c24;
     border-radius: 30px;
     max-width: 350px;
     background: white;

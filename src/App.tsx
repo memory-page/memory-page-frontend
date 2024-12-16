@@ -10,7 +10,9 @@ import SignUpPage from './pages/Auth/SignUpPage';
 import MainPage from './pages/Main/MainPage';
 import SharePage from './pages/Share/SharePage';
 import CreatePage from './pages/Board/CreatePage';
-import MyPage from './pages/Board/MyPage';
+// import MyPage from './pages/Board/MyPage';
+import BoardPage from './pages/Board/BoardPage';
+import useUserInfo from './store/UserInfo';
 
 interface RouteConfig {
   element: JSX.Element;
@@ -19,13 +21,15 @@ interface RouteConfig {
 }
 
 function App(): JSX.Element {
+  const { id } = useUserInfo();
+
   const routes: RouteConfig[] = [
     { path: '/', element: <MainPage /> },
     { path: '/login', element: <LoginPage /> },
     { path: '/signup', element: <SignUpPage /> },
     { path: '/share', element: <SharePage /> },
     { path: '/board/create', element: <CreatePage /> },
-    { path: '/board', element: <MyPage />},
+    { path: `/board/${id}`, element: <BoardPage /> },
   ];
 
   return (

@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import useUserInfo from '../../store/UserInfo';
 
 interface CreateRequest {
   board_name: string;
@@ -11,6 +12,7 @@ interface CreateRequest {
 const useCreate = () => {
   const apiUrl = import.meta.env.VITE_API_URL as string;
   const navigate = useNavigate();
+  const { setID } = useUserInfo();
 
   const create = async (
     board_name: string,
@@ -25,9 +27,11 @@ const useCreate = () => {
         bg_num,
         graduated_at,
       };
-      await axios
-        .post(`${apiUrl}/board`, requestData)
-        .then(() => navigate('/share'));
+      const response = await axios.post(`${apiUrl}/board`, requestData);
+
+      console.log('칠판 아이디:', response.data.data.board_id);
+      setID(response.data.data.board_id);
+      navigate('/share');
 
       console.log('통신성공');
     } catch (error) {
