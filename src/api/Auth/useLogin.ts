@@ -1,46 +1,54 @@
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { Cookies } from "react-cookie";
 
-interface SignUpRequest {
+interface LoginRequest {
   board_name: string,
   password: string,
 }
 
-interface SignUpResponse {
+interface LoginResponse {
   detail: string;
   data: {
     board_id: string;
+    access_token: string;
   };
 }
 
-const useSignUp = () => {
+const useLogin = () => {
 	const apiUrl = import.meta.env.VITE_API_URL as string;
 	const navigate = useNavigate();
-	const signUp = async (
+  const cookies = new Cookies();
+
+	const login = async (
     board_name: string,
     password: string,
 	): Promise<void> => {
-		try {
-			const requestData: SignUpRequest = {
-        board_name,
-        password,
-			};
-      const response = await axios.post<SignUpResponse>(`${apiUrl}/board/validate`, requestData);
-      
-			console.log("valid 통과", response.data);
-
-      navigate('/board/create');
-		} catch(error) {
+    const requestData: LoginRequest = {
+      board_name,
+      password,
+    };
+    await axios.post<LoginResponse>(`${apiUrl}/board/login`, requestData)
+    .then(response=>{
+      const token = response.data.data.access_token;
+      cookies.set("access_token", token, {
+        path: "/",
+        httpOnly: false,
+        secure: true,
+        sameSite: "strict",
+      })
+      navigate("/board");
+    }).catch(error => {
       if (axios.isAxiosError(error)) {
         const detailMessage = error.response?.data?.detail || "알 수 없는 오류가 발생했습니다.";
         throw new Error(detailMessage); // 에러를 throw하여 상위 컴포넌트에서 처리
       } else {
         throw new Error("예상치 못한 오류가 발생했습니다.");
       }
-    }
+    })
 	};
 
-	return signUp;
+	return login;
 };
 
-export default useSignUp;
+export default useLogin;
