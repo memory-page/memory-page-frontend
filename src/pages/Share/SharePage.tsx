@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { Button } from '@mui/material';
 import { useNavigate, Link } from 'react-router-dom';
 
-import backgroundImg from '../../assets/background.png';
+import bg0 from '../../assets/bg-0.png';
 import Title from '../../components/Title';
 import instagramIcon from '../../assets/instagram.png';
 import kakaotalkIcon from '../../assets/kakaotalk.png';
@@ -52,7 +52,7 @@ const ShareContainer = styled.div`
   align-items: center;
   color: white;
 
-  background-image: url(${backgroundImg});
+  background-image: url(${bg0});
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;

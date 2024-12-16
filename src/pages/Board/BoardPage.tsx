@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import backgroundImg from '../../assets/background.png';
+import bg0 from '../../assets/bg-0.png';
 import bg1 from '../../assets/bg-1.png';
 import bg2 from '../../assets/bg-2.png';
 import bg3 from '../../assets/bg-3.png';
@@ -8,9 +8,11 @@ import bg5 from '../../assets/bg-5.png';
 import useUserInfo from '../../store/UserInfo';
 import { useNavigate } from 'react-router-dom';
 import { Cookies } from 'react-cookie';
+import useBoard from '../../api/Board/useBoard';
+import { useEffect } from 'react';
 
 const backgroundImages = [
-  { img: backgroundImg, num: 0 },
+  { img: bg0, num: 0 },
   { img: bg1, num: 1 },
   { img: bg2, num: 2 },
   { img: bg3, num: 3 },
@@ -19,11 +21,26 @@ const backgroundImages = [
 ];
 
 const BoardPage = () => {
-  const { board_name, setID } = useUserInfo();
+  const { board_name, setID, bg_num } = useUserInfo();
   const navigate = useNavigate();
   const cookies = new Cookies();
+  const board = useBoard();
+
+  const loadBoard = async () => {
+    try {
+      await board();
+      console.log('board 잘 실행');
+    } catch (error) {
+      console.log('칠판 불러오는는 중 오류 발생:', error);
+    }
+  };
+
+  useEffect(() => {
+    loadBoard();
+  }, []);
+
   return (
-    <BoardConatainer $background={bg2}>
+    <BoardConatainer $background={`bg${bg_num}`}>
       <BoardHeader>
         {board_name} 님의 <span style={{ color: 'green' }}>추억 칠판</span>
       </BoardHeader>
@@ -38,7 +55,7 @@ const BoardPage = () => {
               navigate('/login');
             }}
           >
-            로그인 화면으로 돌아가기
+            로그아웃
           </button>
           <button
             className='share_button'

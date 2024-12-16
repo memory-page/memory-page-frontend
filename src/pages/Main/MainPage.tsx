@@ -1,10 +1,10 @@
-import React from "react";
-import styled from "styled-components";
-import { Button } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import React from 'react';
+import styled from 'styled-components';
+import { Button } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
-import backgroundImg from "../../assets/background.png";
-import Title from "../../components/Title"
+import bg0 from '../../assets/bg-0.png';
+import Title from '../../components/Title';
 
 const MainPage: React.FC = () => {
   const navigate = useNavigate();
@@ -13,19 +13,27 @@ const MainPage: React.FC = () => {
     navigate(path);
   };
 
-	return (
-		<MainContainer>
-			<Title/>
-			<Footer>
-        <SubmitButton variant="contained" type="button" onClick={() => handleNavigate("/signup")}>
+  return (
+    <MainContainer>
+      <Title />
+      <Footer>
+        <SubmitButton
+          variant='contained'
+          type='button'
+          onClick={() => handleNavigate('/signup')}
+        >
           칠판 만들기
         </SubmitButton>
-        <SubmitButton variant="contained" type="button" onClick={() => handleNavigate("/login")}>
+        <SubmitButton
+          variant='contained'
+          type='button'
+          onClick={() => handleNavigate('/login')}
+        >
           칠판 확인하기
         </SubmitButton>
-			</Footer>
-		</MainContainer>
-	);
+      </Footer>
+    </MainContainer>
+  );
 };
 
 // Styled Components
@@ -36,25 +44,23 @@ const MainContainer = styled.div`
   align-items: center;
   color: white;
 
-  background-image: url(${backgroundImg});
+  background-image: url(${bg0});
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-
 `;
 
-
 const Footer = styled.div`
-    font-size: 15px;
-    text-align: center;
-    margin-top: 20px;
+  font-size: 15px;
+  text-align: center;
+  margin-top: 20px;
 `;
 
 const SubmitButton = styled(Button)`
   && {
     width: 200px;
     margin: 10px;
-    color: #013C24;
+    color: #013c24;
     border-radius: 30px;
     max-width: 350px;
     background: white;

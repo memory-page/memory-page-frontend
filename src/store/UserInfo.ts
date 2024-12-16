@@ -9,6 +9,7 @@ interface UserInfoState {
   setID: (id: string) => void;
   setBoardName: (name: string) => void;
   setPassword: (password: string) => void;
+  setBgNum: (newBgNum: number) => void;
   setGraduatedAt: (date: string) => void;
 }
 
