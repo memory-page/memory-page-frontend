@@ -1,15 +1,19 @@
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import useUserInfo from '../../store/UserInfo';
+import { Cookies } from 'react-cookie';
 
 const useBoard = () => {
   const apiUrl = import.meta.env.VITE_API_URL as string;
-  const navigate = useNavigate();
+  const cookies = new Cookies();
   const { id, setBgNum } = useUserInfo();
+  const token = cookies.get('access_token');
 
   const board = async (): Promise<void> => {
     try {
-      const response = await axios.get(`${apiUrl}/board/${id}`);
+      const response = await axios.get(
+        `${apiUrl}/board/${id}?board_id=${id}&token=${token}`
+      );
 
       console.log('배경 번호:', response.data.data.bg_num);
       console.log('메모 리스트', response.data.data.memo_list);

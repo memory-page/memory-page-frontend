@@ -29,7 +29,7 @@ const BoardPage = () => {
   const loadBoard = async () => {
     try {
       await board();
-      console.log('board 잘 실행');
+      console.log('board 실행');
     } catch (error) {
       console.log('칠판 불러오는는 중 오류 발생:', error);
     }
@@ -37,10 +37,11 @@ const BoardPage = () => {
 
   useEffect(() => {
     loadBoard();
-  }, []);
+    console.log(bg_num);
+  }, [bg_num]);
 
   return (
-    <BoardConatainer $background={`bg${bg_num}`}>
+    <BoardConatainer $background={backgroundImages[bg_num].img}>
       <BoardHeader>
         {board_name} 님의 <span style={{ color: 'green' }}>추억 칠판</span>
       </BoardHeader>
