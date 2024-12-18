@@ -1,35 +1,24 @@
 import styled from 'styled-components';
-import bg0 from '../../assets/bg-0.png';
-import bg1 from '../../assets/bg-1.png';
-import bg2 from '../../assets/bg-2.png';
-import bg3 from '../../assets/bg-3.png';
-import bg4 from '../../assets/bg-4.png';
-import bg5 from '../../assets/bg-5.png';
 import useUserInfo from '../../store/UserInfo';
 import { useNavigate } from 'react-router-dom';
 import { Cookies } from 'react-cookie';
 import useBoard from '../../api/Board/useBoard';
-import { useEffect } from 'react';
-
-const backgroundImages = [
-  { img: bg0, num: 0 },
-  { img: bg1, num: 1 },
-  { img: bg2, num: 2 },
-  { img: bg3, num: 3 },
-  { img: bg4, num: 4 },
-  { img: bg5, num: 5 },
-];
+import { useEffect, useState } from 'react';
+import BoardPage from './components/BoardPage';
 
 const MyPage = () => {
   const { board_name, setID, bg_num } = useUserInfo();
   const navigate = useNavigate();
   const cookies = new Cookies();
   const board = useBoard();
+  const [isOwner, setIsOwner] = useState(true);
 
   const loadBoard = async () => {
     try {
-      await board();
-      console.log('board 실행');
+      const data = await board();
+      if (data) {
+        setIsOwner(data.data.isOwner);
+      }
     } catch (error) {
       console.log('칠판 불러오는는 중 오류 발생:', error);
     }
@@ -41,15 +30,14 @@ const MyPage = () => {
   }, [bg_num]);
 
   return (
-    <BoardConatainer $background={backgroundImages[bg_num].img}>
-      <BoardHeader>
-        {board_name} 님의 <span style={{ color: 'green' }}>추억 칠판</span>
-      </BoardHeader>
+    <BoardConatainer>
+      <BoardPage/>
 
       <BoardFooter>
-        <Button>
+        {isOwner ? (
+          <Button>
           <button
-            className='login_button'
+            className='button_up'
             onClick={() => {
               cookies.remove('access_token', { path: '/' });
               setID('');
@@ -59,7 +47,7 @@ const MyPage = () => {
             로그아웃
           </button>
           <button
-            className='share_button'
+            className='button_down'
             onClick={() => {
               navigate('/share');
             }}
@@ -67,21 +55,38 @@ const MyPage = () => {
             칠판 공유하러 가기
           </button>
         </Button>
+        ) : (
+          <Button>
+            <button
+              className='button_up'
+              onClick={() => {
+                navigate('/');
+              }}
+            >
+              전 어떤 친구였나요?
+            </button>
+            <button
+              className='button_down'
+              onClick={() => {
+                navigate('/signup');
+              }}
+            >
+              나도 칠판 만들고 싶어요!
+            </button>
+          </Button>
+        )}
+        
       </BoardFooter>
     </BoardConatainer>
   );
 };
 export default MyPage;
 
-const BoardConatainer = styled.div<{ $background: string }>`
+const BoardConatainer = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-image: url(${(props) => props.$background});
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
   position: relative;
 `;
 
@@ -109,7 +114,7 @@ const BoardFooter = styled.div`
 const Button = styled.div`
   text-align: center;
   padding-top: 33px;
-  .login_button {
+  .button_up {
     width: 247px;
     height: 57px;
     font-size: 19px;
@@ -117,7 +122,7 @@ const Button = styled.div`
     margin-bottom: 19px;
   }
 
-  .share_button {
+  .button_down {
     width: 247px;
     height: 57px;
     font-size: 19px;

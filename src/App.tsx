@@ -10,8 +10,8 @@ import SignUpPage from './pages/Auth/SignUpPage';
 import MainPage from './pages/Main/MainPage';
 import SharePage from './pages/Share/SharePage';
 import CreatePage from './pages/Board/CreatePage';
-// import MyPage from './pages/Board/MyPage';
-import BoardPage from './pages/Board/BoardPage';
+import MyPage from './pages/Board/MyPage';
+import BoardPage from './pages/Board/components/BoardPage';
 import useUserInfo from './store/UserInfo';
 
 interface RouteConfig {
@@ -29,7 +29,7 @@ function App(): JSX.Element {
     { path: '/signup', element: <SignUpPage /> },
     { path: '/share', element: <SharePage /> },
     { path: '/board/create', element: <CreatePage /> },
-    { path: `/board/${id}`, element: <BoardPage /> },
+    { path: `/board/${id}`, element: <MyPage/> },
   ];
 
   return (

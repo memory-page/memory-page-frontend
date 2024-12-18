@@ -8,7 +8,7 @@ const useBoard = () => {
   const cookies = new Cookies();
   const { id, setBgNum } = useUserInfo();
   const token = cookies.get('access_token');
-
+  console.log("!");
   const board = async (): Promise<void> => {
     try {
       const response = await axios.get(
