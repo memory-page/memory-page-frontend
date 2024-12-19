@@ -3,19 +3,24 @@ import styled from 'styled-components';
 import { Button } from '@mui/material';
 import { useNavigate, Link } from 'react-router-dom';
 
-import bg0 from '../../assets/bg-0.png';
+import bg0 from '../../assets/background/bg-0.png';
 import Title from '../../components/Title';
 import instagramIcon from '../../assets/instagram.png';
 import kakaotalkIcon from '../../assets/kakaotalk.png';
 import useUserInfo from '../../store/UserInfo';
+import useLogin from '../../api/Auth/useLogin';
+
 const SharePage: React.FC = () => {
-  const navigate = useNavigate();
+  const login = useLogin();
+  const { board_name, password } = useUserInfo();
+  const handleSubmit = async () => {
+    try {
+      await login(board_name, password);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
-  const handleNavigate = (path: string) => {
-    navigate(path);
-  };
-
-  const { id } = useUserInfo();
 
   return (
     <ShareContainer>
@@ -34,7 +39,7 @@ const SharePage: React.FC = () => {
         <SubmitButton
           variant='contained'
           type='button'
-          onClick={() => handleNavigate(`/board/${id}`)}
+          onClick={handleSubmit}
         >
           생성된 칠판 보러가기
         </SubmitButton>

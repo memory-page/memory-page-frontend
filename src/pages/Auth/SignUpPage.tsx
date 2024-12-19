@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import SignUpForm from './components/SignUpForm';
-import bg0 from '../../assets/bg-0.png';
+import bg0 from '../../assets/background/bg-0.png';
 import Title from '../../components/Title';
 
 const SignUpPage: React.FC = () => {
