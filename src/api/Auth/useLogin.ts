@@ -21,13 +21,7 @@ const useLogin = () => {
   const apiUrl = import.meta.env.VITE_API_URL as string;
   const navigate = useNavigate();
   const cookies = new Cookies();
-  const { id, setID } = useUserInfo();
-
-  useEffect(() => {
-    if (id) {
-      navigate(`/board/${id}`);
-    }
-  }, [id, navigate]);
+  const { setID } = useUserInfo();
 
   const login = async (board_name: string, password: string): Promise<LoginResponse> => {
     const requestData: LoginRequest = {

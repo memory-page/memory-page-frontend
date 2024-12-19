@@ -3,12 +3,16 @@ import styled from 'styled-components';
 import { Button, TextField } from '@mui/material';
 import useLogin from '../../../api/Auth/useLogin';
 import useUserInfo from '../../../store/UserInfo';
+import { useNavigate } from 'react-router-dom';
 
 const LoginForm: React.FC = () => {
   const [userId, setUserId] = useState('');
   const [password, setPassword] = useState('');
   const [loginError, setLoginError] = useState('');
   const login = useLogin();
+  const navigate = useNavigate();
+
+  const {setID, setBoardName} = useUserInfo();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -22,9 +26,10 @@ const LoginForm: React.FC = () => {
     }
     try {
       const response = await login(userId, password);
-      const {setID, setBoardName} = useUserInfo();
       setID(response.data.board_id);
       setBoardName(userId);
+
+      navigate(`/board/${response.data.board_id}`);
     } catch (error) {
       if (error instanceof Error) {
         setLoginError(error.message);

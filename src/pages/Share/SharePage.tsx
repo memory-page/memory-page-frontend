@@ -2,24 +2,31 @@ import React from 'react';
 import styled from 'styled-components';
 import { Button } from '@mui/material';
 import { useNavigate, Link } from 'react-router-dom';
+import { Cookies } from 'react-cookie';
 
 import bg0 from '../../assets/background/bg-0.png';
 import Title from '../../components/Title';
 import instagramIcon from '../../assets/instagram.png';
 import kakaotalkIcon from '../../assets/kakaotalk.png';
 import useUserInfo from '../../store/UserInfo';
-import useLogin from '../../api/Auth/useLogin';
 
 const SharePage: React.FC = () => {
-  const login = useLogin();
-  const { board_name, password } = useUserInfo();
+  const navigate = useNavigate();
+  const cookies = new Cookies();
+  const { id } = useUserInfo();
   const handleSubmit = async () => {
-    try {
-      await login(board_name, password);
-    } catch (error) {
-      console.log(error);
+    const token = cookies.get('access_token');
+    if (!token) {
+      // 토큰이 없으면 로그인 페이지로 리다이렉트
+      console.warn('토큰 없음: 로그인 페이지로 이동');
+      navigate('/login');
+      return;
     }
-  }
+
+    // 토큰이 유효하다고 가정하고 칠판으로 이동
+    console.log('토큰 확인 완료, 칠판으로 이동');
+    navigate(`/board/${id}`);
+  };
 
 
   return (
