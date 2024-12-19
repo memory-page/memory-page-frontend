@@ -9,21 +9,16 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { useState } from 'react';
 import useUserInfo from '../../store/UserInfo';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import useCreate from '../../api/Board/useCreate';
-import backgroundImages from '../../assets/backgrounds';
+import BoardPage from './components/BoardPage';
+import memoImages from '../../assets/memo';
 
-interface IUserInfo {
-  password: string;
-  bg_num: number;
-  graduated_at: string;
-}
-
-const CreatePage = () => {
+const CreateMemoPage = () => {
+  const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const create = useCreate();
-  const { board_name, password, graduated_at } = useUserInfo();
-  const [bgNum, setBgNum] = useState(backgroundImages[0].num);
+  const { board_name, bg_num } = useUserInfo();
+  const [memoNum, setMemoNum] = useState(memoImages[0].num);
 
   const sliderSettings = {
     dots: true,
@@ -36,7 +31,6 @@ const CreatePage = () => {
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     try {
-      await create(board_name, password, bgNum, graduated_at);
       console.log('create 잘 실행');
     } catch (error) {
       console.log('회원가입 중 오류 발생:', error);
@@ -44,7 +38,8 @@ const CreatePage = () => {
   };
 
   return (
-    <CreateContainer $background={backgroundImages[bgNum].img}>
+    <CreateContainer>
+      <BoardPage />
       <Header>
         <CancelButton>
           <FontAwesomeIcon icon={faCircleXmark} onClick={() => navigate(-1)} />
@@ -55,10 +50,10 @@ const CreatePage = () => {
       </Header>
       <BackgroundSlide>
         <Slider {...sliderSettings}>
-          {backgroundImages.map((image, index) => (
+          {memoImages.map((image, index) => (
             <SlideItem
               key={index}
-              onClick={() => setBgNum(image.num)}
+              onClick={() => setMemoNum(image.num)}
             >
               <img src={image.img} alt={`bg${index + 1}`} />
             </SlideItem>
@@ -68,18 +63,13 @@ const CreatePage = () => {
     </CreateContainer>
   );
 };
-export default CreatePage;
+export default CreateMemoPage;
 
-const CreateContainer = styled.div<{ $background: string }>`
+const CreateContainer = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  color: white;
-  background-image: url(${(props) => props.$background});
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
   position: relative;
 `;
 

@@ -12,8 +12,6 @@ import SharePage from './pages/Share/SharePage';
 import CreatePage from './pages/Board/CreatePage';
 import MyPage from './pages/Board/MyPage';
 import CreateMemoPage from './pages/Board/CreateMemoPage';
-import BoardPage from './pages/Board/components/BoardPage';
-import useUserInfo from './store/UserInfo';
 import DevPage from './pages/Dev/DevPage';
 
 interface RouteConfig {
