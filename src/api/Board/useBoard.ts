@@ -1,37 +1,46 @@
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import useUserInfo from '../../store/UserInfo';
 import { Cookies } from 'react-cookie';
+import { useParams } from 'react-router-dom';
+import useUserInfo from '../../store/UserInfo';
 
 const useBoard = () => {
   const apiUrl = import.meta.env.VITE_API_URL as string;
   const cookies = new Cookies();
-  const { id, setBgNum } = useUserInfo();
+  const { setBgNum, setBoardName, setIsSelf } = useUserInfo();
+  const { id } = useParams<{ id: string }>();
   const token = cookies.get('access_token');
 
-  const board = async (): Promise<void> => {
+  const board = async (): Promise<{ bg_num: number; board_name: string; is_self: boolean } | undefined> => {
+    if (!id) {
+      console.error('보드 ID 누락');
+      return undefined;
+    }
+
     try {
-      const response = await axios.get(
-        `${apiUrl}/board/${id}?board_id=${id}&token=${token}`
-      );
+      const response = await axios.get(`${apiUrl}/board/${id}`, {
+        params: { board_id: id, token },
+      });
 
-      console.log('배경 번호:', response.data.data.bg_num);
-      console.log('메모 리스트', response.data.data.memo_list);
-      setBgNum(response.data.data.bg_num);
+      const { bg_num, board_name, is_self } = response.data.data;
 
-      console.log('/board/{board_id} 통신성공');
+      // Zustand 상태 업데이트
+      setBgNum(bg_num);
+      setBoardName(board_name);
+      setIsSelf(is_self);
+
+      console.log(`배경 번호: ${bg_num}, 보드 이름: ${board_name}`);
+      return { bg_num, board_name, is_self };
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        const message =
-          error.response?.data?.message || '칠판 불러오기기에 실패했습니다.';
-        alert(message);
+        alert(error.response?.data?.message || '칠판 불러오기 실패');
       } else {
-        console.error('예상치 못한 오류: ', error);
-        alert('예상치 못한 오류가 발생했습니다.');
+        console.error('예상치 못한 오류:', error);
+        alert('예상치 못한 오류 발생');
       }
     }
   };
 
   return board;
 };
+
 export default useBoard;
