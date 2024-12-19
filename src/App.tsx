@@ -21,7 +21,6 @@ interface RouteConfig {
 }
 
 function App(): JSX.Element {
-  const { id } = useUserInfo();
 
   const routes: RouteConfig[] = [
     { path: '/', element: <MainPage /> },
@@ -29,7 +28,7 @@ function App(): JSX.Element {
     { path: '/signup', element: <SignUpPage /> },
     { path: '/share', element: <SharePage /> },
     { path: '/board/create', element: <CreatePage /> },
-    { path: `/board/${id}`, element: <MyPage/> },
+    { path: `/board/:id`, element: <MyPage/> },
   ];
 
   return (

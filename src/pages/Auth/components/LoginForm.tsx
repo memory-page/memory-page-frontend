@@ -21,7 +21,10 @@ const LoginForm: React.FC = () => {
       setLoginError('비밀번호를 입력해주세요');
     }
     try {
-      await login(userId, password);
+      const response = await login(userId, password);
+      const {setID, setBoardName} = useUserInfo();
+      setID(response.data.board_id);
+      setBoardName(userId);
     } catch (error) {
       if (error instanceof Error) {
         setLoginError(error.message);

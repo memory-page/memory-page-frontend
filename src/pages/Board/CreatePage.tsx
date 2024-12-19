@@ -29,7 +29,6 @@ const backgroundImages = [
 ];
 
 interface IUserInfo {
-  board_name: string;
   password: string;
   bg_num: number;
   graduated_at: string;
@@ -62,7 +61,6 @@ const CreatePage = () => {
   const { board_name, password, graduated_at } = useUserInfo();
 
   const userInfo: IUserInfo = {
-    board_name: board_name,
     password: password,
     bg_num: bgNum,
     graduated_at: graduated_at,
