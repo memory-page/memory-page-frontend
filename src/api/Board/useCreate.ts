@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { Cookies } from 'react-cookie';
 import useUserInfo from '../../store/UserInfo';
 
 interface CreateRequest {
@@ -8,10 +9,18 @@ interface CreateRequest {
   bg_num: number;
   graduated_at: string;
 }
+interface CreateResponse {
+  detail: string;
+  data: {
+    board_id: string;
+    access_token: string;
+  };
+}
 
 const useCreate = () => {
   const apiUrl = import.meta.env.VITE_API_URL as string;
   const navigate = useNavigate();
+  const cookies = new Cookies();
   const { setID } = useUserInfo();
 
   const create = async (
@@ -27,7 +36,18 @@ const useCreate = () => {
         bg_num,
         graduated_at,
       };
-      const response = await axios.post(`${apiUrl}/board`, requestData);
+      const response = await axios.post<CreateResponse>(`${apiUrl}/board`, requestData);
+
+      const { board_id, access_token } = response.data.data;
+
+      setID(board_id);
+      cookies.set('access_token', access_token, {
+        path: '/',
+        httpOnly: false,
+        secure: true,
+        sameSite: 'strict',
+      });
+
 
       console.log('칠판 아이디:', response.data.data.board_id);
       setID(response.data.data.board_id);
