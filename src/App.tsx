@@ -11,6 +11,7 @@ import MainPage from './pages/Main/MainPage';
 import SharePage from './pages/Share/SharePage';
 import CreatePage from './pages/Board/CreatePage';
 import MyPage from './pages/Board/MyPage';
+import CreateMemoPage from './pages/Board/CreateMemoPage';
 import BoardPage from './pages/Board/components/BoardPage';
 import useUserInfo from './store/UserInfo';
 
@@ -29,6 +30,7 @@ function App(): JSX.Element {
     { path: '/share', element: <SharePage /> },
     { path: '/board/create', element: <CreatePage /> },
     { path: `/board/:id`, element: <MyPage/> },
+    { path: `/board/memo/:id`, element: <CreateMemoPage />},
   ];
 
   return (

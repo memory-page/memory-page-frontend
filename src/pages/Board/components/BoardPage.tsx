@@ -1,21 +1,15 @@
 import styled from 'styled-components';
-import { useEffect } from 'react';
 import useUserInfo from '../../../store/UserInfo';
-import useBoard from '../../../api/Board/useBoard';
-import bg0 from '../../../assets/bg-0.png';
-import bg1 from '../../../assets/bg-1.png';
-import bg2 from '../../../assets/bg-2.png';
-import bg3 from '../../../assets/bg-3.png';
-import bg4 from '../../../assets/bg-4.png';
-import bg5 from '../../../assets/bg-5.png';
-
-const backgroundImages = [bg0, bg1, bg2, bg3, bg4, bg5];
+import backgroundImages from '../../../assets/backgrounds';
 
 const BoardPage = () => {
   const { board_name, bg_num } = useUserInfo();
+  if (!backgroundImages.length) {
+    return <div>배경 이미지를 로드할 수 없습니다.</div>;
+  }
 
   return (
-    <BoardContainer $background={backgroundImages[bg_num]}>
+    <BoardContainer $background={backgroundImages[bg_num]?.img || ''}>
       <BoardHeader>
         {board_name} 님의 <span style={{ color: 'green' }}>추억 칠판</span>
       </BoardHeader>
