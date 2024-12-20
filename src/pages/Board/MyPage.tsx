@@ -40,7 +40,7 @@ const MyPage = () => {
       </>
     ) : (
       <>
-        <StyledButton onClick={() => navigate(`/board/memo/${id}`)}>전 어떤 친구였나요?</StyledButton>
+        <StyledButton onClick={() => navigate(`/board/memo/create/${id}`)}>전 어떤 친구였나요?</StyledButton>
         <StyledButton onClick={() => navigate('/signup')}>나도 칠판 만들기</StyledButton>
       </>
     );

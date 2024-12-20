@@ -17,7 +17,6 @@ import memoImages from '../../assets/memo';
 const CreateMemoPage = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { board_name, bg_num } = useUserInfo();
   const [memoNum, setMemoNum] = useState(memoImages[0].num);
 
   const sliderSettings = {
@@ -28,10 +27,12 @@ const CreateMemoPage = () => {
     slidesToScroll: 1,
   };
 
-  const handleSubmit = async (e: any) => {
-    e.preventDefault();
+  const selectedMemo = memoImages.find((image) => image.num === memoNum);
+
+
+  const handleSubmit = async () => {
     try {
-      console.log('create 잘 실행');
+      console.log('Memo 선택:', selectedMemo);
     } catch (error) {
       console.log('회원가입 중 오류 발생:', error);
     }
@@ -39,15 +40,10 @@ const CreateMemoPage = () => {
 
   return (
     <CreateContainer>
-      <BoardPage />
-      <Header>
-        <CancelButton>
-          <FontAwesomeIcon icon={faCircleXmark} onClick={() => navigate(-1)} />
-        </CancelButton>
-        <SubmitButton>
-          <FontAwesomeIcon icon={faCircleCheck} onClick={handleSubmit} />
-        </SubmitButton>
-      </Header>
+      <BoardPage onSubmit={handleSubmit}/>
+      <SelectedMemoContainer>
+        {selectedMemo && <SelectedMemoImage src={selectedMemo.img} alt="선택된 메모" />}
+      </SelectedMemoContainer>
       <BackgroundSlide>
         <Slider {...sliderSettings}>
           {memoImages.map((image, index) => (
@@ -69,40 +65,29 @@ const CreateContainer = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
-  align-items: center;
   position: relative;
 `;
 
-const Header = styled.div`
-  position: relative;
-  width: 100%;
+const SelectedMemoContainer = styled.div`
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
 `;
 
-const CancelButton = styled.div`
-  position: absolute;
-  top: 10px;
-  left: 14px;
-  font-size: 45px;
-  color: #d9d9d9;
-  opacity: 0.7;
-  cursor: pointer;
+const SelectedMemoImage = styled.img`
+  width: 380px;
+  height: 380px;
+  border-radius: 12px;
 `;
 
-const SubmitButton = styled.div`
-  position: absolute;
-  top: 10px;
-  right: 14px;
-  font-size: 45px;
-  color: #d9d9d9;
-  opacity: 0.7;
-  cursor: pointer;
-`;
 
 const BackgroundSlide = styled.div`
   position: absolute;
   bottom: 0;
   width: 100%;
-  height: 200px;
+  height: 150px;
   padding-left: 32px;
   padding-right: 33px;
   padding-top: 20px;
