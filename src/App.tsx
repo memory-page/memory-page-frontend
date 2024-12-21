@@ -14,6 +14,7 @@ import MyPage from './pages/Board/MyPage';
 import CreateMemoPage from './pages/Board/CreateMemoPage';
 import BoardPage from './pages/Board/components/BoardPage';
 import useUserInfo from './store/UserInfo';
+import DevPage from './pages/Dev/DevPage';
 
 interface RouteConfig {
   element: JSX.Element;
@@ -22,15 +23,15 @@ interface RouteConfig {
 }
 
 function App(): JSX.Element {
-
   const routes: RouteConfig[] = [
     { path: '/', element: <MainPage /> },
     { path: '/login', element: <LoginPage /> },
     { path: '/signup', element: <SignUpPage /> },
     { path: '/share', element: <SharePage /> },
     { path: '/board/create', element: <CreatePage /> },
-    { path: `/board/:id`, element: <MyPage/> },
-    { path: `/board/memo/:id`, element: <CreateMemoPage />},
+    { path: `/board/:id`, element: <MyPage /> },
+    { path: `/board/memo/:id`, element: <CreateMemoPage /> },
+    { path: `/dev`, element: <DevPage /> },
   ];
 
   return (

@@ -28,7 +28,6 @@ const SharePage: React.FC = () => {
     navigate(`/board/${id}`);
   };
 
-
   return (
     <ShareContainer>
       <Title />
@@ -43,14 +42,10 @@ const SharePage: React.FC = () => {
           <Icon src={kakaotalkIcon} alt='Kakaotalk Icon' />
           카카오톡으로 공유
         </SubmitButton>
-        <SubmitButton
-          variant='contained'
-          type='button'
-          onClick={handleSubmit}
-        >
+        <SubmitButton variant='contained' type='button' onClick={handleSubmit}>
           생성된 칠판 보러가기
         </SubmitButton>
-        <StyledLink to='/intro'>개발자 소개 보러가기</StyledLink>
+        <StyledLink to='/dev'>개발자 소개 보러가기</StyledLink>
       </Footer>
     </ShareContainer>
   );
