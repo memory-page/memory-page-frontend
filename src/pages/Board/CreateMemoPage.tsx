@@ -7,10 +7,11 @@ import { useNavigate, useParams } from 'react-router-dom';
 import BoardPage from './components/BoardPage';
 import memoImages from '../../assets/memo';
 import useMemoValid from '../../api/Board/useMemoValid';
+import useUserInfo from '../../store/UserInfo';
 
 const CreateMemoPage = () => {
   const { id } = useParams<{ id: string }>();
-  const navigate = useNavigate();
+  const {setAuthor, setContent, setBgMemo} = useUserInfo();
   const memoValid = useMemoValid();
 
   const [memoNum, setMemoNum] = useState(memoImages[0].num);
@@ -27,7 +28,7 @@ const CreateMemoPage = () => {
   };
 
   const selectedMemo = memoImages.find((image) => image.num === memoNum);
-
+  console.log(memoNum);
 
   const handleSubmit = async () => {
     try {
@@ -42,8 +43,16 @@ const CreateMemoPage = () => {
         setMemoError('닉네임을 입력해 주세요');
         return;
       }
-      
-      await memoValid(id, nickname, memoText);
+      else{
+
+        setAuthor(nickname);
+        setContent(memoText);
+        setBgMemo(memoNum);
+
+        console.log('데이터 저장 완료:', {id, nickname, memoText});
+
+        await memoValid(id, nickname, memoText);
+      }
     } catch (error) {
       if (error instanceof Error) {
         setMemoError(error.message);

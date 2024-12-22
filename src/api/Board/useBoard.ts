@@ -6,7 +6,7 @@ import useUserInfo from '../../store/UserInfo';
 const useBoard = () => {
   const apiUrl = import.meta.env.VITE_API_URL as string;
   const cookies = new Cookies();
-  const { setBgNum, setBoardName, setIsSelf } = useUserInfo();
+  const { setBgNum, setBoardName, setIsSelf, setMemoList } = useUserInfo();
   const { id } = useParams<{ id: string }>();
   const token = cookies.get('access_token');
 
@@ -21,13 +21,14 @@ const useBoard = () => {
         params: { board_id: id, token },
       });
 
-      const { bg_num, board_name, is_self } = response.data.data;
+      const { bg_num, board_name, is_self, memo_list } = response.data.data;
 
       // Zustand 상태 업데이트
       setBgNum(bg_num);
       setBoardName(board_name);
       setIsSelf(is_self);
-
+      setMemoList(memo_list); // memo_list 저장
+      console.log(memo_list);
       console.log(`배경 번호: ${bg_num}, 보드 이름: ${board_name}`);
       return { bg_num, board_name, is_self };
     } catch (error) {

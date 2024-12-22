@@ -1,46 +1,55 @@
 import axios from 'axios';
 import { Cookies } from 'react-cookie';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import useUserInfo from '../../store/UserInfo';
+
+interface MemoRequest {
+  locate_idx: number,
+  bg_num: number,
+  author: string,
+  content: string,
+}
+
+interface MemoResponse {
+  detail: string;
+  data: {
+    memo_id: string;
+  };
+}
 
 const useMemo = () => {
   const apiUrl = import.meta.env.VITE_API_URL as string;
   const cookies = new Cookies();
-  const { setBgNum, setBoardName, setIsSelf } = useUserInfo();
+  const navigate = useNavigate();
+  const { bg_memo, author, content } = useUserInfo();
   const { id } = useParams<{ id: string }>();
   const token = cookies.get('access_token');
 
-  const board = async (): Promise<{ bg_num: number; board_name: string; is_self: boolean } | undefined> => {
-    if (!id) {
-      console.error('보드 ID 누락');
-      return undefined;
+  const memo = async (index: number): Promise<void> => {
+    console.log(bg_memo);
+    const requestData: MemoRequest = {
+      locate_idx: index,
+      bg_num: bg_memo,
+      author,
+      content,
     }
-
     try {
-      const response = await axios.get(`${apiUrl}/board/${id}`, {
-        params: { board_id: id, token },
-      });
+      const response = await axios.post(`${apiUrl}/board/${id}/memo`, requestData);
 
-      const { bg_num, board_name, is_self } = response.data.data;
-
-      // Zustand 상태 업데이트
-      setBgNum(bg_num);
-      setBoardName(board_name);
-      setIsSelf(is_self);
-
-      console.log(`배경 번호: ${bg_num}, 보드 이름: ${board_name}`);
-      return { bg_num, board_name, is_self };
+      console.log("메모생성",response.data);
+      navigate(`/board/${id}`);
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        alert(error.response?.data?.message || '칠판 불러오기 실패');
+        const detailMessage = error.response?.data?.detail || "알 수 없는 오류가 발생했습니다.";
+        console.log(detailMessage);
+        throw new Error(detailMessage); // 에러를 throw하여 상위 컴포넌트에서 처리
       } else {
-        console.error('예상치 못한 오류:', error);
-        alert('예상치 못한 오류 발생');
+        throw new Error("예상치 못한 오류가 발생했습니다.");
       }
     }
   };
 
-  return board;
+  return memo;
 };
 
 export default useMemo;
