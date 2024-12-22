@@ -1,29 +1,23 @@
 import styled from 'styled-components';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faCircleCheck,
-  faCircleXmark,
-} from '@fortawesome/free-solid-svg-icons';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import BoardPage from './components/BoardPage';
+import memoImages from '../../assets/memo';
+import useMemoValid from '../../api/Board/useMemoValid';
 import useUserInfo from '../../store/UserInfo';
-import { useNavigate } from 'react-router-dom';
-import useCreate from '../../api/Board/useCreate';
-import backgroundImages from '../../assets/backgrounds';
 
-interface IUserInfo {
-  password: string;
-  bg_num: number;
-  graduated_at: string;
-}
+const CreateMemoPage = () => {
+  const { id } = useParams<{ id: string }>();
+  const {setAuthor, setContent, setBgMemo} = useUserInfo();
+  const memoValid = useMemoValid();
 
-const CreatePage = () => {
-  const navigate = useNavigate();
-  const create = useCreate();
-  const { board_name, password, graduated_at } = useUserInfo();
-  const [bgNum, setBgNum] = useState(backgroundImages[0].num);
+  const [memoNum, setMemoNum] = useState(memoImages[0].num);
+  const [memoText, setLocalMemoText] = useState('');
+  const [nickname, setLocalNickname] = useState('');
+  const [memoError, setMemoError] = useState('');
 
   const sliderSettings = {
     dots: true,
@@ -33,86 +27,115 @@ const CreatePage = () => {
     slidesToScroll: 1,
   };
 
-  const handleSubmit = async (e: any) => {
-    e.preventDefault();
+  const selectedMemo = memoImages.find((image) => image.num === memoNum);
+  console.log(memoNum);
+
+  const handleSubmit = async () => {
     try {
-      await create(board_name, password, bgNum, graduated_at);
-      console.log('create 잘 실행');
+      if(!id){
+        throw new Error('보드 ID 누락');
+      }
+      if(!memoText){
+        setMemoError('메모를 입력해 주세요');
+        return;
+      }
+      else if(!nickname){
+        setMemoError('닉네임을 입력해 주세요');
+        return;
+      }
+      else{
+
+        setAuthor(nickname);
+        setContent(memoText);
+        setBgMemo(memoNum);
+
+        console.log('데이터 저장 완료:', {id, nickname, memoText});
+
+        await memoValid(id, nickname, memoText);
+      }
     } catch (error) {
-      console.log('회원가입 중 오류 발생:', error);
+      if (error instanceof Error) {
+        setMemoError(error.message);
+      } else {
+        setMemoError('예상치 못한 오류가 발생했습니다.');
+      }
     }
   };
 
   return (
-    <CreateContainer $background={backgroundImages[bgNum].img}>
-      <Header>
-        <CancelButton>
-          <FontAwesomeIcon icon={faCircleXmark} onClick={() => navigate(-1)} />
-        </CancelButton>
-        <SubmitButton>
-          <FontAwesomeIcon icon={faCircleCheck} onClick={handleSubmit} />
-        </SubmitButton>
-      </Header>
+    <CreateContainer>
+      <BoardPage onSubmit={handleSubmit}/>
+      <SelectedMemoContainer>
+        {selectedMemo && (
+          <SelectedMemoImageWrapper>
+            <SelectedMemoImage src={selectedMemo.img} alt="선택된 메모" />
+            <MemoTextInput
+              placeholder="여기에 글을 작성하세요..."
+              value={memoText}
+              onChange={(e) => setLocalMemoText(e.target.value)}
+            />
+            <NicknameInput
+              placeholder="닉네임 입력"
+              value={nickname}
+              onChange={(e) => setLocalNickname(e.target.value)}
+            />
+          </SelectedMemoImageWrapper>
+        )}
+        {<ErrorText>{memoError || ' '}</ErrorText>}
+      </SelectedMemoContainer>
+      
       <BackgroundSlide>
         <Slider {...sliderSettings}>
-          {backgroundImages.map((image, index) => (
+          {memoImages.map((image, index) => (
             <SlideItem
               key={index}
-              onClick={() => setBgNum(image.num)}
+              onClick={() => setMemoNum(image.num)}
             >
               <img src={image.img} alt={`bg${index + 1}`} />
             </SlideItem>
           ))}
         </Slider>
       </BackgroundSlide>
+      
     </CreateContainer>
   );
 };
-export default CreatePage;
+export default CreateMemoPage;
 
-const CreateContainer = styled.div<{ $background: string }>`
+const CreateContainer = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
+  position: relative;
+`;
+
+const SelectedMemoContainer = styled.div`
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+`;
+
+const SelectedMemoImageWrapper = styled.div`
+  position: relative;
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  color: white;
-  background-image: url(${(props) => props.$background});
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  position: relative;
 `;
 
-const Header = styled.div`
-  position: relative;
-  width: 100%;
+const SelectedMemoImage = styled.img`
+  width: 380px;
+  height: 380px;
+  border-radius: 12px;
 `;
 
-const CancelButton = styled.div`
-  position: absolute;
-  top: 10px;
-  left: 14px;
-  font-size: 45px;
-  color: #d9d9d9;
-  opacity: 0.7;
-  cursor: pointer;
-`;
-
-const SubmitButton = styled.div`
-  position: absolute;
-  top: 10px;
-  right: 14px;
-  font-size: 45px;
-  color: #d9d9d9;
-  opacity: 0.7;
-  cursor: pointer;
-`;
 
 const BackgroundSlide = styled.div`
   position: absolute;
   bottom: 0;
   width: 100%;
-  height: 200px;
+  height: 150px;
   padding-left: 32px;
   padding-right: 33px;
   padding-top: 20px;
@@ -148,4 +171,40 @@ const SlideItem = styled.div`
       transform: scale(0.95);
     }
   }
+`;
+const MemoTextInput = styled.textarea`
+  position: absolute;
+  top: 40%;
+  width: 80%;
+  height: 200px;
+  margin-top: -60px;
+  padding: 10px;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  outline: none;
+  background: rgba(255, 255, 255, 0);
+  resize: none;
+  text-align : center;
+`;
+
+const NicknameInput = styled.input`
+  position: absolute;
+  bottom: 20px;
+  width: 50%;
+  padding: 8px;
+  font-size: 14px;
+  border: none;
+  border-radius: 8px;
+  outline: none;
+  background: rgba(255, 255, 255, 0);
+  text-align: center;
+`;
+
+const ErrorText = styled.div`
+  color: red;
+  font-size: 0.875rem;
+  text-align: center;
+  margin-top: 8px;
+  min-height: 1.2rem;
 `;

@@ -12,6 +12,7 @@ import useUserInfo from '../../store/UserInfo';
 import { useNavigate } from 'react-router-dom';
 import useCreate from '../../api/Board/useCreate';
 import backgroundImages from '../../assets/backgrounds';
+import BoardPage from './components/BoardPage';
 
 interface IUserInfo {
   password: string;
@@ -22,8 +23,7 @@ interface IUserInfo {
 const CreatePage = () => {
   const navigate = useNavigate();
   const create = useCreate();
-  const { board_name, password, graduated_at } = useUserInfo();
-  const [bgNum, setBgNum] = useState(backgroundImages[0].num);
+  const { board_name, password, graduated_at, bg_num, setBgNum } = useUserInfo();
 
   const sliderSettings = {
     dots: true,
@@ -33,10 +33,9 @@ const CreatePage = () => {
     slidesToScroll: 1,
   };
 
-  const handleSubmit = async (e: any) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
     try {
-      await create(board_name, password, bgNum, graduated_at);
+      await create(board_name, password, bg_num, graduated_at);
       console.log('create 잘 실행');
     } catch (error) {
       console.log('회원가입 중 오류 발생:', error);
@@ -44,15 +43,9 @@ const CreatePage = () => {
   };
 
   return (
-    <CreateContainer $background={backgroundImages[bgNum].img}>
-      <Header>
-        <CancelButton>
-          <FontAwesomeIcon icon={faCircleXmark} onClick={() => navigate(-1)} />
-        </CancelButton>
-        <SubmitButton>
-          <FontAwesomeIcon icon={faCircleCheck} onClick={handleSubmit} />
-        </SubmitButton>
-      </Header>
+    <CreateContainer $background={backgroundImages[bg_num].img}>
+      
+      <BoardPage onSubmit={handleSubmit}/>
       <BackgroundSlide>
         <Slider {...sliderSettings}>
           {backgroundImages.map((image, index) => (
@@ -74,7 +67,6 @@ const CreateContainer = styled.div<{ $background: string }>`
   height: 100%;
   display: flex;
   flex-direction: column;
-  align-items: center;
   color: white;
   background-image: url(${(props) => props.$background});
   background-size: cover;

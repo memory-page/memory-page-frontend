@@ -12,8 +12,7 @@ import SharePage from './pages/Share/SharePage';
 import CreatePage from './pages/Board/CreatePage';
 import MyPage from './pages/Board/MyPage';
 import CreateMemoPage from './pages/Board/CreateMemoPage';
-import BoardPage from './pages/Board/components/BoardPage';
-import useUserInfo from './store/UserInfo';
+import SelectMemoPage from './pages/Board/SelectMemoPage';
 import DevPage from './pages/Dev/DevPage';
 
 interface RouteConfig {
@@ -29,8 +28,9 @@ function App(): JSX.Element {
     { path: '/signup', element: <SignUpPage /> },
     { path: '/share', element: <SharePage /> },
     { path: '/board/create', element: <CreatePage /> },
-    { path: `/board/:id`, element: <MyPage /> },
-    { path: `/board/memo/:id`, element: <CreateMemoPage /> },
+    { path: `/board/:id`, element: <MyPage/> },
+    { path: `/board/memo/create/:id`, element: <CreateMemoPage />},
+    { path: `/board/memo/select/:id`, element: <SelectMemoPage />},
     { path: `/dev`, element: <DevPage /> },
   ];
 
