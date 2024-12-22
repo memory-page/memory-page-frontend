@@ -1,23 +1,22 @@
 import styled from 'styled-components';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faCircleCheck,
-  faCircleXmark,
-} from '@fortawesome/free-solid-svg-icons';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { useState } from 'react';
-import useUserInfo from '../../store/UserInfo';
 import { useNavigate, useParams } from 'react-router-dom';
-import useCreate from '../../api/Board/useCreate';
 import BoardPage from './components/BoardPage';
 import memoImages from '../../assets/memo';
+import useMemoValid from '../../api/Board/useMemoValid';
 
 const CreateMemoPage = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const memoValid = useMemoValid();
+
   const [memoNum, setMemoNum] = useState(memoImages[0].num);
+  const [memoText, setLocalMemoText] = useState('');
+  const [nickname, setLocalNickname] = useState('');
+  const [memoError, setMemoError] = useState('');
 
   const sliderSettings = {
     dots: true,
@@ -32,9 +31,25 @@ const CreateMemoPage = () => {
 
   const handleSubmit = async () => {
     try {
-      console.log('Memo 선택:', selectedMemo);
+      if(!id){
+        throw new Error('보드 ID 누락');
+      }
+      if(!memoText){
+        setMemoError('메모를 입력해 주세요');
+        return;
+      }
+      else if(!nickname){
+        setMemoError('닉네임을 입력해 주세요');
+        return;
+      }
+      
+      await memoValid(id, nickname, memoText);
     } catch (error) {
-      console.log('회원가입 중 오류 발생:', error);
+      if (error instanceof Error) {
+        setMemoError(error.message);
+      } else {
+        setMemoError('예상치 못한 오류가 발생했습니다.');
+      }
     }
   };
 
@@ -42,8 +57,24 @@ const CreateMemoPage = () => {
     <CreateContainer>
       <BoardPage onSubmit={handleSubmit}/>
       <SelectedMemoContainer>
-        {selectedMemo && <SelectedMemoImage src={selectedMemo.img} alt="선택된 메모" />}
+        {selectedMemo && (
+          <SelectedMemoImageWrapper>
+            <SelectedMemoImage src={selectedMemo.img} alt="선택된 메모" />
+            <MemoTextInput
+              placeholder="여기에 글을 작성하세요..."
+              value={memoText}
+              onChange={(e) => setLocalMemoText(e.target.value)}
+            />
+            <NicknameInput
+              placeholder="닉네임 입력"
+              value={nickname}
+              onChange={(e) => setLocalNickname(e.target.value)}
+            />
+          </SelectedMemoImageWrapper>
+        )}
+        {<ErrorText>{memoError || ' '}</ErrorText>}
       </SelectedMemoContainer>
+      
       <BackgroundSlide>
         <Slider {...sliderSettings}>
           {memoImages.map((image, index) => (
@@ -56,6 +87,7 @@ const CreateMemoPage = () => {
           ))}
         </Slider>
       </BackgroundSlide>
+      
     </CreateContainer>
   );
 };
@@ -74,6 +106,13 @@ const SelectedMemoContainer = styled.div`
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 10;
+`;
+
+const SelectedMemoImageWrapper = styled.div`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
 const SelectedMemoImage = styled.img`
@@ -123,4 +162,40 @@ const SlideItem = styled.div`
       transform: scale(0.95);
     }
   }
+`;
+const MemoTextInput = styled.textarea`
+  position: absolute;
+  top: 40%;
+  width: 80%;
+  height: 200px;
+  margin-top: -60px;
+  padding: 10px;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  outline: none;
+  background: rgba(255, 255, 255, 0);
+  resize: none;
+  text-align : center;
+`;
+
+const NicknameInput = styled.input`
+  position: absolute;
+  bottom: 20px;
+  width: 50%;
+  padding: 8px;
+  font-size: 14px;
+  border: none;
+  border-radius: 8px;
+  outline: none;
+  background: rgba(255, 255, 255, 0);
+  text-align: center;
+`;
+
+const ErrorText = styled.div`
+  color: red;
+  font-size: 0.875rem;
+  text-align: center;
+  margin-top: 8px;
+  min-height: 1.2rem;
 `;

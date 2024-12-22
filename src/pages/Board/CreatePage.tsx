@@ -25,8 +25,6 @@ const CreatePage = () => {
   const create = useCreate();
   const { board_name, password, graduated_at, bg_num, setBgNum } = useUserInfo();
 
-
-  console.log(bg_num);
   const sliderSettings = {
     dots: true,
     infinite: true,
