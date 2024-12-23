@@ -8,12 +8,7 @@ import Title from '../../components/Title';
 import instagramIcon from '../../assets/instagram.png';
 import kakaotalkIcon from '../../assets/kakaotalk.png';
 import useUserInfo from '../../store/UserInfo';
-
-declare global {
-  interface Window {
-    Kakao: any;
-  }
-}
+import useKakao from '../../api/Share/useKakao';
 
 const SharePage: React.FC = () => {
   const navigate = useNavigate();
@@ -33,63 +28,8 @@ const SharePage: React.FC = () => {
     navigate(`/board/${id}`);
   };
 
-  useEffect(() => {
-    const loadKakaoSDK = () => {
-      if (!window.Kakao) {
-        console.warn('Kakao SDK not loaded!');
-        return;
-      }
-      if (!window.Kakao.isInitialized()) {
-        window.Kakao.init('3316792d09958ac7dd7f5e5046f30715');
-        console.log('Kakao SDK 초기화 여부 : ', window.Kakao.isInitialized());
-      }
-    };
+  const kakao = useKakao();
 
-    if (!window.Kakao) {
-      const script = document.createElement('script');
-      script.src = 'https://developers.kakao.com/sdk/js/kakao.min.js';
-      script.onload = loadKakaoSDK;
-      document.body.appendChild(script);
-    } else {
-      loadKakaoSDK();
-    }
-  }, []);
-
-  const shareToKakao = () => {
-    if (!window.Kakao) {
-      alert('Kakao SDK not loaded!');
-      return;
-    }
-
-    window.Kakao.Link.sendDefault({
-      objectType: 'feed',
-      content: {
-        title: '추억의 칠판',
-        description: '친구 추억 칠판에 롤링페이퍼를 붙여주세요!',
-        imageUrl:
-          'https://cdn.pixabay.com/photo/2016/08/12/19/34/ceismas-1589483_1280.jpg',
-        link: {
-          mobileWebUrl: '',
-          webUrl: '',
-        },
-      },
-      // buttons: [
-      //   {
-      //     title: '웹으로 보기',
-      //     link: {
-      //       webUrl: 'https://www.naver.com',
-      //     },
-      //   },
-      //   {
-      //     title: '앱으로 보기',
-      //     link: {
-      //       mobileWebUrl: 'https://www.naver.com',
-      //       webUrl: 'https://www.naver.com',
-      //     },
-      //   },
-      // ],
-    });
-  };
   return (
     <ShareContainer>
       <Title />
@@ -100,7 +40,7 @@ const SharePage: React.FC = () => {
           <Icon src={instagramIcon} alt='Instagram Icon' />
           인스타그램으로 공유
         </SubmitButton>
-        <SubmitButton variant='contained' type='button' onClick={shareToKakao}>
+        <SubmitButton variant='contained' type='button' onClick={kakao}>
           <Icon src={kakaotalkIcon} alt='Kakaotalk Icon' />
           카카오톡으로 공유
         </SubmitButton>
