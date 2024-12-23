@@ -1,4 +1,4 @@
-import React, { useState, FormEvent } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Button, TextField } from '@mui/material';
 import useLogin from '../../../api/Auth/useLogin';
@@ -12,7 +12,7 @@ const LoginForm: React.FC = () => {
   const login = useLogin();
   const navigate = useNavigate();
 
-  const {setID, setBoardName} = useUserInfo();
+  const { setID, setBoardName } = useUserInfo();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

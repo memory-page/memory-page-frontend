@@ -1,23 +1,21 @@
 import styled from 'styled-components';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import { useState, useEffect  } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import BoardPage from './components/BoardPage';
-import { Cookies } from 'react-cookie';
 import useBoard from '../../api/Board/useBoard';
-import useMemo from '../../api/Board/useMemo';
-import useUserInfo from '../../store/UserInfo';
+import useMemoAPI from '../../api/Board/useMemo';
 
 const SelectMemoPage = () => {
   const { id } = useParams<{ id: string }>();
-  const navigate = useNavigate();
   const board = useBoard();
-  const memo = useMemo();
+  const memo = useMemoAPI();
 
   const loadBoardData = async () => {
     try {
       const data = await board();
+      console.log(data);
     } catch (error) {
       console.error('칠판 불러오는 중 오류:', error);
     }
@@ -30,11 +28,11 @@ const SelectMemoPage = () => {
   }, [id]);
 
   const handleButtonClick = async (index: number) => {
-    if(!id){
-      console.error('보드 ID 누락')
+    if (!id) {
+      console.error('보드 ID 누락');
       return;
     }
-    try{
+    try {
       await memo(index);
     } catch (error) {
       console.log('메모 생성 중:', error);
@@ -43,12 +41,8 @@ const SelectMemoPage = () => {
 
   return (
     <CreateContainer>
-      
       <BoardPage onAddButtonClick={handleButtonClick} />
-      <BoardFooter>
-        원하는 위치를 선택해주세요
-      </BoardFooter>
-      
+      <BoardFooter>원하는 위치를 선택해주세요</BoardFooter>
     </CreateContainer>
   );
 };

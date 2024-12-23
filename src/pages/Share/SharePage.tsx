@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { Button } from '@mui/material';
 import { useNavigate, Link } from 'react-router-dom';
 import { Cookies } from 'react-cookie';
-
 import bg0 from '../../assets/background/bg-0.png';
 import Title from '../../components/Title';
 import instagramIcon from '../../assets/instagram.png';

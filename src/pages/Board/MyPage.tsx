@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Cookies } from 'react-cookie';
 import useBoard from '../../api/Board/useBoard';
@@ -15,6 +15,7 @@ const MyPage = () => {
   const loadBoardData = async () => {
     try {
       const data = await board();
+      console.log(data);
     } catch (error) {
       console.error('칠판 불러오는 중 오류:', error);
     }
@@ -36,12 +37,18 @@ const MyPage = () => {
     is_self ? (
       <>
         <StyledButton onClick={handleLogout}>로그아웃</StyledButton>
-        <StyledButton onClick={() => navigate('/share')}>칠판 공유하기</StyledButton>
+        <StyledButton onClick={() => navigate('/share')}>
+          칠판 공유하기
+        </StyledButton>
       </>
     ) : (
       <>
-        <StyledButton onClick={() => navigate(`/board/memo/create/${id}`)}>전 어떤 친구였나요?</StyledButton>
-        <StyledButton onClick={() => navigate('/signup')}>나도 칠판 만들기</StyledButton>
+        <StyledButton onClick={() => navigate(`/board/memo/create/${id}`)}>
+          전 어떤 친구였나요?
+        </StyledButton>
+        <StyledButton onClick={() => navigate('/signup')}>
+          나도 칠판 만들기
+        </StyledButton>
       </>
     );
 

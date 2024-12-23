@@ -2,7 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 import { Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-
 import bg0 from '../../assets/background/bg-0.png';
 import Title from '../../components/Title';
 

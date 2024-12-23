@@ -1,29 +1,16 @@
 import styled from 'styled-components';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faCircleCheck,
-  faCircleXmark,
-} from '@fortawesome/free-solid-svg-icons';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import { useState } from 'react';
 import useUserInfo from '../../store/UserInfo';
-import { useNavigate } from 'react-router-dom';
 import useCreate from '../../api/Board/useCreate';
 import backgroundImages from '../../assets/backgrounds';
 import BoardPage from './components/BoardPage';
 
-interface IUserInfo {
-  password: string;
-  bg_num: number;
-  graduated_at: string;
-}
-
 const CreatePage = () => {
-  const navigate = useNavigate();
   const create = useCreate();
-  const { board_name, password, graduated_at, bg_num, setBgNum } = useUserInfo();
+  const { board_name, password, graduated_at, bg_num, setBgNum } =
+    useUserInfo();
 
   const sliderSettings = {
     dots: true,
@@ -44,15 +31,11 @@ const CreatePage = () => {
 
   return (
     <CreateContainer $background={backgroundImages[bg_num].img}>
-      
-      <BoardPage onSubmit={handleSubmit}/>
+      <BoardPage onSubmit={handleSubmit} />
       <BackgroundSlide>
         <Slider {...sliderSettings}>
           {backgroundImages.map((image, index) => (
-            <SlideItem
-              key={index}
-              onClick={() => setBgNum(image.num)}
-            >
+            <SlideItem key={index} onClick={() => setBgNum(image.num)}>
               <img src={image.img} alt={`bg${index + 1}`} />
             </SlideItem>
           ))}
@@ -73,31 +56,6 @@ const CreateContainer = styled.div<{ $background: string }>`
   background-position: center;
   background-repeat: no-repeat;
   position: relative;
-`;
-
-const Header = styled.div`
-  position: relative;
-  width: 100%;
-`;
-
-const CancelButton = styled.div`
-  position: absolute;
-  top: 10px;
-  left: 14px;
-  font-size: 45px;
-  color: #d9d9d9;
-  opacity: 0.7;
-  cursor: pointer;
-`;
-
-const SubmitButton = styled.div`
-  position: absolute;
-  top: 10px;
-  right: 14px;
-  font-size: 45px;
-  color: #d9d9d9;
-  opacity: 0.7;
-  cursor: pointer;
 `;
 
 const BackgroundSlide = styled.div`

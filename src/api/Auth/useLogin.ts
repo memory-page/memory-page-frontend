@@ -1,8 +1,6 @@
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
 import { Cookies } from 'react-cookie';
 import useUserInfo from '../../store/UserInfo';
-import { useEffect } from 'react';
 
 interface LoginRequest {
   board_name: string;
@@ -19,11 +17,13 @@ interface LoginResponse {
 
 const useLogin = () => {
   const apiUrl = import.meta.env.VITE_API_URL as string;
-  const navigate = useNavigate();
   const cookies = new Cookies();
   const { setID } = useUserInfo();
 
-  const login = async (board_name: string, password: string): Promise<LoginResponse> => {
+  const login = async (
+    board_name: string,
+    password: string
+  ): Promise<LoginResponse> => {
     const requestData: LoginRequest = {
       board_name,
       password,
@@ -40,22 +40,22 @@ const useLogin = () => {
 
       // 쿠키에 토큰 저장
       const token = response.data.data.access_token;
-      cookies.set("access_token", token, {
-        path: "/",
+      cookies.set('access_token', token, {
+        path: '/',
         httpOnly: false,
         secure: true,
-        sameSite: "strict",
+        sameSite: 'strict',
       });
 
-      console.log("로그인 성공:", response.data.data);
+      console.log('로그인 성공:', response.data.data);
       return response.data; // 반환 타입 맞춤
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const detailMessage =
-          error.response?.data?.detail || "알 수 없는 오류가 발생했습니다.";
+          error.response?.data?.detail || '알 수 없는 오류가 발생했습니다.';
         throw new Error(detailMessage);
       } else {
-        throw new Error("예상치 못한 오류가 발생했습니다.");
+        throw new Error('예상치 못한 오류가 발생했습니다.');
       }
     }
   };
