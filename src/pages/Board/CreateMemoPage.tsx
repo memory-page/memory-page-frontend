@@ -3,7 +3,7 @@ import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import BoardPage from './components/BoardPage';
 import memoImages from '../../assets/memo';
 import useMemoValid from '../../api/Board/useMemoValid';
@@ -11,7 +11,7 @@ import useUserInfo from '../../store/UserInfo';
 
 const CreateMemoPage = () => {
   const { id } = useParams<{ id: string }>();
-  const {setAuthor, setContent, setBgMemo} = useUserInfo();
+  const { setAuthor, setContent, setBgMemo } = useUserInfo();
   const memoValid = useMemoValid();
 
   const [memoNum, setMemoNum] = useState(memoImages[0].num);
@@ -32,24 +32,21 @@ const CreateMemoPage = () => {
 
   const handleSubmit = async () => {
     try {
-      if(!id){
+      if (!id) {
         throw new Error('보드 ID 누락');
       }
-      if(!memoText){
+      if (!memoText) {
         setMemoError('메모를 입력해 주세요');
         return;
-      }
-      else if(!nickname){
+      } else if (!nickname) {
         setMemoError('닉네임을 입력해 주세요');
         return;
-      }
-      else{
-
+      } else {
         setAuthor(nickname);
         setContent(memoText);
         setBgMemo(memoNum);
 
-        console.log('데이터 저장 완료:', {id, nickname, memoText});
+        console.log('데이터 저장 완료:', { id, nickname, memoText });
 
         await memoValid(id, nickname, memoText);
       }
@@ -64,18 +61,18 @@ const CreateMemoPage = () => {
 
   return (
     <CreateContainer>
-      <BoardPage onSubmit={handleSubmit}/>
+      <BoardPage onSubmit={handleSubmit} />
       <SelectedMemoContainer>
         {selectedMemo && (
           <SelectedMemoImageWrapper>
-            <SelectedMemoImage src={selectedMemo.img} alt="선택된 메모" />
+            <SelectedMemoImage src={selectedMemo.img} alt='선택된 메모' />
             <MemoTextInput
-              placeholder="여기에 글을 작성하세요..."
+              placeholder='여기에 글을 작성하세요...'
               value={memoText}
               onChange={(e) => setLocalMemoText(e.target.value)}
             />
             <NicknameInput
-              placeholder="닉네임 입력"
+              placeholder='닉네임 입력'
               value={nickname}
               onChange={(e) => setLocalNickname(e.target.value)}
             />
@@ -83,20 +80,16 @@ const CreateMemoPage = () => {
         )}
         {<ErrorText>{memoError || ' '}</ErrorText>}
       </SelectedMemoContainer>
-      
+
       <BackgroundSlide>
         <Slider {...sliderSettings}>
           {memoImages.map((image, index) => (
-            <SlideItem
-              key={index}
-              onClick={() => setMemoNum(image.num)}
-            >
+            <SlideItem key={index} onClick={() => setMemoNum(image.num)}>
               <img src={image.img} alt={`bg${index + 1}`} />
             </SlideItem>
           ))}
         </Slider>
       </BackgroundSlide>
-      
     </CreateContainer>
   );
 };
@@ -129,7 +122,6 @@ const SelectedMemoImage = styled.img`
   height: 380px;
   border-radius: 12px;
 `;
-
 
 const BackgroundSlide = styled.div`
   position: absolute;
@@ -185,7 +177,7 @@ const MemoTextInput = styled.textarea`
   outline: none;
   background: rgba(255, 255, 255, 0);
   resize: none;
-  text-align : center;
+  text-align: center;
 `;
 
 const NicknameInput = styled.input`
