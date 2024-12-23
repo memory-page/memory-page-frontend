@@ -4,6 +4,10 @@ import Title from '../../components/DevTitle';
 import pinImage from '../../assets/pin.png';
 import githubLogo from '../../assets/github.png';
 import linkedInLogo from '../../assets/linked-in.png';
+import jeonghoon from '../../assets/dev/jeonghoon.jpg';
+import minseo from '../../assets/dev/minseo.jpg';
+import ingyu from '../../assets/dev/ingyu.jpg';
+import jiwoo from '../../assets/dev/jiwoo.jpg';
 
 const DevPage = () => {
   return (
@@ -11,10 +15,11 @@ const DevPage = () => {
       <Title />
       <MemberContainer>
         {/* 멤버 목록 */}
+        {/* 박지우 */}
         <MemberBox>
           <Sticker src={pinImage} alt='스티커 이미지' />
           <MemberProfile>
-            <Picture></Picture>
+            <Picture src={jiwoo} alt='박지우'></Picture>
             <Name>박지우 | Frontend</Name>
           </MemberProfile>
           <LogoLink
@@ -25,17 +30,18 @@ const DevPage = () => {
             <Logo src={githubLogo} alt='깃헙 로고' />
           </LogoLink>
           <LogoLink
-            href='https://github.com/jiwoopark727'
+            href='https://www.linkedin.com/in/%EC%A7%80%EC%9A%B0-%EB%B0%95-56a269343/'
             target='_blank'
             rel='noopener noreferrer'
           >
             <Logo src={linkedInLogo} alt='링크드인 로고' />
           </LogoLink>
         </MemberBox>
+        {/* 김정훈 */}
         <MemberBox>
           <Sticker src={pinImage} alt='스티커 이미지' />
           <MemberProfile>
-            <Picture></Picture>
+            <Picture src={jeonghoon} alt='김정훈' />
             <Name>김정훈 | Frontend</Name>
           </MemberProfile>
           <LogoLink
@@ -46,17 +52,18 @@ const DevPage = () => {
             <Logo src={githubLogo} alt='깃헙 로고' />
           </LogoLink>
           <LogoLink
-            href='https://github.com/jeong011010'
+            href='https://kr.linkedin.com/in/정훈-김-b05009343'
             target='_blank'
             rel='noopener noreferrer'
           >
             <Logo src={linkedInLogo} alt='링크드인 로고' />
           </LogoLink>
         </MemberBox>
+        {/* 강민서 */}
         <MemberBox>
           <Sticker src={pinImage} alt='스티커 이미지' />
           <MemberProfile>
-            <Picture></Picture>
+            <Picture src={minseo} alt='강민서' />
             <Name>강민서 | Backend</Name>
           </MemberProfile>
           <LogoLink
@@ -67,17 +74,18 @@ const DevPage = () => {
             <Logo src={githubLogo} alt='깃헙 로고' />
           </LogoLink>
           <LogoLink
-            href='https://github.com/mseo39'
+            href='https://www.linkedin.com/in/민서-강-649663315?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app'
             target='_blank'
             rel='noopener noreferrer'
           >
             <Logo src={linkedInLogo} alt='링크드인 로고' />
           </LogoLink>
         </MemberBox>
+        {/* 이인규 */}
         <MemberBox>
           <Sticker src={pinImage} alt='스티커 이미지' />
           <MemberProfile>
-            <Picture></Picture>
+            <Picture src={ingyu} alt='이인규' />
             <Name>이인규 | Backend</Name>
           </MemberProfile>
           <LogoLink
@@ -88,7 +96,7 @@ const DevPage = () => {
             <Logo src={githubLogo} alt='깃헙 로고' />
           </LogoLink>
           <LogoLink
-            href='https://github.com/DevelopLee20'
+            href='https://www.linkedin.com/in/인규-이-89b273310 '
             target='_blank'
             rel='noopener noreferrer'
           >
@@ -154,10 +162,9 @@ const MemberProfile = styled.div`
   background-color: white;
 `;
 
-const Picture = styled.div`
+const Picture = styled.img`
   width: 110px;
   height: 120px;
-  background-color: gray;
 `;
 
 const Name = styled.div`
