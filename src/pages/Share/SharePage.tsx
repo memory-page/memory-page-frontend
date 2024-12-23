@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { Button } from '@mui/material';
 import { useNavigate, Link } from 'react-router-dom';
@@ -8,6 +8,7 @@ import Title from '../../components/Title';
 import instagramIcon from '../../assets/instagram.png';
 import kakaotalkIcon from '../../assets/kakaotalk.png';
 import useUserInfo from '../../store/UserInfo';
+import useKakao from '../../api/Share/useKakao';
 
 const SharePage: React.FC = () => {
   const navigate = useNavigate();
@@ -27,6 +28,8 @@ const SharePage: React.FC = () => {
     navigate(`/board/${id}`);
   };
 
+  const kakao = useKakao();
+
   return (
     <ShareContainer>
       <Title />
@@ -37,7 +40,7 @@ const SharePage: React.FC = () => {
           <Icon src={instagramIcon} alt='Instagram Icon' />
           인스타그램으로 공유
         </SubmitButton>
-        <SubmitButton variant='contained' type='button' onClick={() => {}}>
+        <SubmitButton variant='contained' type='button' onClick={kakao}>
           <Icon src={kakaotalkIcon} alt='Kakaotalk Icon' />
           카카오톡으로 공유
         </SubmitButton>
