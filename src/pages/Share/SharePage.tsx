@@ -9,6 +9,7 @@ import instagramIcon from '../../assets/instagram.png';
 import kakaotalkIcon from '../../assets/kakaotalk.png';
 import useUserInfo from '../../store/UserInfo';
 import useKakao from '../../api/Share/useKakao';
+import useInstagram from '../../api/Share/useInstagram';
 
 const SharePage: React.FC = () => {
   const navigate = useNavigate();
@@ -28,7 +29,9 @@ const SharePage: React.FC = () => {
     navigate(`/board/${id}`);
   };
 
-  const kakao = useKakao();
+  const kakaoShare = useKakao();
+
+  const instagramShare = useInstagram();
 
   return (
     <ShareContainer>
@@ -36,11 +39,15 @@ const SharePage: React.FC = () => {
       <ExplainText>추억 칠판이 생성되었습니다</ExplainText>
       <ExplainText>이제 공유를 해볼까요?</ExplainText>
       <Footer>
-        <SubmitButton variant='contained' type='button' onClick={() => {}}>
+        <SubmitButton
+          variant='contained'
+          type='button'
+          onClick={instagramShare}
+        >
           <Icon src={instagramIcon} alt='Instagram Icon' />
           인스타그램으로 공유
         </SubmitButton>
-        <SubmitButton variant='contained' type='button' onClick={kakao}>
+        <SubmitButton variant='contained' type='button' onClick={kakaoShare}>
           <Icon src={kakaotalkIcon} alt='Kakaotalk Icon' />
           카카오톡으로 공유
         </SubmitButton>
