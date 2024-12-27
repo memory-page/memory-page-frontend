@@ -78,6 +78,7 @@ export default BoardPage;
 // Styled Components
 const BoardContainer = styled.div<{ $background: string }>`
   height: 100%;
+  width: 100%;
   display: flex;
   flex-direction: column;
   background-image: url(${(props) => props.$background});
@@ -85,6 +86,7 @@ const BoardContainer = styled.div<{ $background: string }>`
   background-position: center;
   background-repeat: no-repeat;
   position: relative;
+  align-items: center;
 `;
 
 const BoardHeader = styled.div`
