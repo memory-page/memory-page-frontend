@@ -1,7 +1,5 @@
 import axios from 'axios';
 import { Cookies } from 'react-cookie';
-import { useParams } from 'react-router-dom';
-import useUserInfo from '../../store/UserInfo';
 
 const useGetMemo = () => {
   const apiUrl = import.meta.env.VITE_API_URL;
