@@ -1,7 +1,6 @@
 import { createGlobalStyle } from 'styled-components';
 
 const GlobalStyle = createGlobalStyle`
-  /* 1. SejongGeulggot 웹폰트 정의 */
   @font-face {
     font-family: 'SejongGeulggot';
     src: url('/fonts/SejongGeulggot.woff2') format('woff2'),
@@ -11,7 +10,6 @@ const GlobalStyle = createGlobalStyle`
     font-style: normal;
   }
 
-  /* 2. Global Style 설정 */
   html, body {
     font-family: 'SejongGeulggot', Arial, sans-serif;
     margin: 0;
@@ -31,7 +29,6 @@ const GlobalStyle = createGlobalStyle`
     box-sizing: border-box;
   }
 
-  /* 3. 입력 폼 요소에도 폰트 적용 */
   input, textarea, button {
     font-family: 'SejongGeulggot', Arial, sans-serif;
     font-size: 16px;
