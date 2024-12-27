@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import useUserInfo from '../../../store/UserInfo';
 import backgroundImages from '../../../assets/backgrounds';
@@ -9,16 +10,50 @@ import {
   faCircleXmark,
 } from '@fortawesome/free-solid-svg-icons';
 import AddIcon from '@mui/icons-material/Add';
+import MemoPopup from './MemoPopup';
+import useGetMemo from '../../../api/Board/useGetMemo';
 
 interface BoardPageProps {
   onSubmit?: () => void;
   onAddButtonClick?: (index: number) => void;
 }
 
+interface Memo {
+  memo_id: string;
+  locate_idx: number;
+  bg_num: number;
+  content: string;
+  author: string;
+}
+
 const BoardPage: React.FC<BoardPageProps> = ({ onSubmit, onAddButtonClick }) => {
   const { board_name, bg_num, memo_list } = useUserInfo();
   const location = useLocation();
   const navigate = useNavigate();
+  const getMemo = useGetMemo();
+
+  const [selectedMemo, setSelectedMemo] = useState<{ author: string; content: string, bgNum?: number } | null>(null);
+
+  const handleMemoClick = async (memo_id: string)  => {
+    try {
+      const data = await getMemo(memo_id);
+      if (data) {
+        const memo = memo_list.find((m) => m.memo_id === memo_id);
+        if (memo) {
+          setSelectedMemo({
+            ...data,
+            bgNum: memo.bg_num, // 배경 이미지 URL 추가
+          });
+        }
+      }
+    } catch (error) {
+      console.error('메모 불러오기 오류:', error);
+    }
+  };
+
+  const closePopup = () => {
+    setSelectedMemo(null);
+  };
 
   const isCreatePage = location.pathname.includes('/create');
   const isSelectPage = location.pathname.includes('/select');
@@ -41,7 +76,7 @@ const BoardPage: React.FC<BoardPageProps> = ({ onSubmit, onAddButtonClick }) => 
       ) : (
         <BoardHeader>
           {board_name} 님의 <span style={{ color: 'green' }}>추억 칠판</span>
-
+              
         </BoardHeader>
       )}
         { isCreatePage ? (<></>
@@ -50,9 +85,12 @@ const BoardPage: React.FC<BoardPageProps> = ({ onSubmit, onAddButtonClick }) => 
           {Array.from({ length: 20 }).map((_, idx) => {
             const memo = memo_list?.find((m) => m.locate_idx === idx);
             return (
-              <MemoSlot key={idx}>
+              <MemoSlot key={memo?.memo_id || idx}> 
                 {memo ? (
-                  <Memo $background={memoImages[memo.bg_num]?.img} />
+                  <Memo
+                    $background={memoImages[memo.bg_num]?.img}
+                    onClick={() => memo && handleMemoClick(memo.memo_id)} // 클릭 시 팝업 상태 업데이트
+                  />
                 ) : (
                   <>
                     {isSelectPage ? (
@@ -67,6 +105,13 @@ const BoardPage: React.FC<BoardPageProps> = ({ onSubmit, onAddButtonClick }) => 
               </MemoSlot>
             );
           })}
+            <MemoPopup
+              isOpen={!!selectedMemo}
+              memoText={selectedMemo?.content || ''}
+              author={selectedMemo?.author || ''}
+              bgNum={selectedMemo?.bgNum}
+              onClose={() => setSelectedMemo(null)}
+            />
         </MemoGrid>
       )}
     </BoardContainer>
