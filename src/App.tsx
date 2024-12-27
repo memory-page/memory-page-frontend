@@ -28,9 +28,9 @@ function App(): JSX.Element {
     { path: '/signup', element: <SignUpPage /> },
     { path: '/share', element: <SharePage /> },
     { path: '/board/create', element: <CreatePage /> },
-    { path: `/board/:id`, element: <MyPage/> },
-    { path: `/board/memo/create/:id`, element: <CreateMemoPage />},
-    { path: `/board/memo/select/:id`, element: <SelectMemoPage />},
+    { path: `/board/:id`, element: <MyPage /> },
+    { path: `/board/memo/create/:id`, element: <CreateMemoPage /> },
+    { path: `/board/memo/select/:id`, element: <SelectMemoPage /> },
     { path: `/dev`, element: <DevPage /> },
   ];
 
