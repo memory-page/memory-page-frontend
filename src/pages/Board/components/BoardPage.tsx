@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import useUserInfo from '../../../store/UserInfo';
 import backgroundImages from '../../../assets/backgrounds';
@@ -9,16 +10,35 @@ import {
   faCircleXmark,
 } from '@fortawesome/free-solid-svg-icons';
 import AddIcon from '@mui/icons-material/Add';
+import MemoPopup from './MemoPopup';
 
 interface BoardPageProps {
   onSubmit?: () => void;
   onAddButtonClick?: (index: number) => void;
 }
 
+interface Memo {
+  memo_id: string;
+  locate_idx: number;
+  bg_num: number;
+  content: string;
+  author: string;
+}
+
 const BoardPage: React.FC<BoardPageProps> = ({ onSubmit, onAddButtonClick }) => {
   const { board_name, bg_num, memo_list } = useUserInfo();
   const location = useLocation();
   const navigate = useNavigate();
+
+  const [selectedMemo, setSelectedMemo] = useState<Memo | null>(null);
+
+  const handleMemoClick = (memo: Memo) => {
+    setSelectedMemo(memo);
+  };
+
+  const closePopup = () => {
+    setSelectedMemo(null);
+  };
 
   const isCreatePage = location.pathname.includes('/create');
   const isSelectPage = location.pathname.includes('/select');
@@ -41,7 +61,7 @@ const BoardPage: React.FC<BoardPageProps> = ({ onSubmit, onAddButtonClick }) => 
       ) : (
         <BoardHeader>
           {board_name} 님의 <span style={{ color: 'green' }}>추억 칠판</span>
-
+              
         </BoardHeader>
       )}
         { isCreatePage ? (<></>
@@ -52,7 +72,10 @@ const BoardPage: React.FC<BoardPageProps> = ({ onSubmit, onAddButtonClick }) => 
             return (
               <MemoSlot key={idx}>
                 {memo ? (
-                  <Memo $background={memoImages[memo.bg_num]?.img} />
+                  <Memo
+                    $background={memoImages[memo.bg_num]?.img}
+                    onClick={() => handleMemoClick(memo)} // 클릭 시 팝업 상태 업데이트
+                  />
                 ) : (
                   <>
                     {isSelectPage ? (
@@ -67,6 +90,12 @@ const BoardPage: React.FC<BoardPageProps> = ({ onSubmit, onAddButtonClick }) => 
               </MemoSlot>
             );
           })}
+            <MemoPopup
+              isOpen={!!selectedMemo}
+              memoText={selectedMemo?.content || ''}
+              author={selectedMemo?.author || ''}
+              onClose={closePopup}
+            />
         </MemoGrid>
       )}
     </BoardContainer>
