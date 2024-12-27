@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import useUserInfo from '../../../store/UserInfo';
 import backgroundImages from '../../../assets/backgrounds';
 import memoImages from '../../../assets/memo';
-import {useLocation, useNavigate} from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faCircleCheck,
@@ -12,6 +12,7 @@ import {
 import AddIcon from '@mui/icons-material/Add';
 import MemoPopup from './MemoPopup';
 import useGetMemo from '../../../api/Board/useGetMemo';
+import ErrorPopup from './ErrorPopup';
 
 interface BoardPageProps {
   onSubmit?: () => void;
@@ -26,15 +27,22 @@ interface Memo {
   author: string;
 }
 
-const BoardPage: React.FC<BoardPageProps> = ({ onSubmit, onAddButtonClick }) => {
+const BoardPage: React.FC<BoardPageProps> = ({
+  onSubmit,
+  onAddButtonClick,
+}) => {
   const { board_name, bg_num, memo_list } = useUserInfo();
   const location = useLocation();
   const navigate = useNavigate();
-  const getMemo = useGetMemo();
+  const { getMemo, errorModal, setErrorModal } = useGetMemo();
 
-  const [selectedMemo, setSelectedMemo] = useState<{ author: string; content: string, bgNum?: number } | null>(null);
+  const [selectedMemo, setSelectedMemo] = useState<{
+    author: string;
+    content: string;
+    bgNum?: number;
+  } | null>(null);
 
-  const handleMemoClick = async (memo_id: string)  => {
+  const handleMemoClick = async (memo_id: string) => {
     try {
       const data = await getMemo(memo_id);
       if (data) {
@@ -60,10 +68,13 @@ const BoardPage: React.FC<BoardPageProps> = ({ onSubmit, onAddButtonClick }) => 
 
   return (
     <BoardContainer $background={backgroundImages[bg_num]?.img || ''}>
-      { isCreatePage ? (
+      {isCreatePage ? (
         <Header>
           <CancelButton>
-            <FontAwesomeIcon icon={faCircleXmark} onClick={() => navigate(-1)} />
+            <FontAwesomeIcon
+              icon={faCircleXmark}
+              onClick={() => navigate(-1)}
+            />
           </CancelButton>
           <SubmitButton onClick={onSubmit}>
             <FontAwesomeIcon icon={faCircleCheck} />
@@ -72,16 +83,16 @@ const BoardPage: React.FC<BoardPageProps> = ({ onSubmit, onAddButtonClick }) => 
       ) : (
         <BoardHeader>
           {board_name} 님의 <span style={{ color: 'green' }}>추억 칠판</span>
-              
         </BoardHeader>
       )}
-        { isCreatePage ? (<></>
+      {isCreatePage ? (
+        <></>
       ) : (
         <MemoGrid>
           {Array.from({ length: 20 }).map((_, idx) => {
             const memo = memo_list?.find((m) => m.locate_idx === idx);
             return (
-              <MemoSlot key={memo?.memo_id || idx}> 
+              <MemoSlot key={memo?.memo_id || idx}>
                 {memo ? (
                   <Memo
                     $background={memoImages[memo.bg_num]?.img}
@@ -91,7 +102,7 @@ const BoardPage: React.FC<BoardPageProps> = ({ onSubmit, onAddButtonClick }) => 
                   <>
                     {isSelectPage ? (
                       <AddButton onClick={() => onAddButtonClick?.(idx)}>
-                        <AddIcon fontSize="large"/>
+                        <AddIcon fontSize='large' />
                       </AddButton>
                     ) : (
                       <></>
@@ -101,14 +112,17 @@ const BoardPage: React.FC<BoardPageProps> = ({ onSubmit, onAddButtonClick }) => 
               </MemoSlot>
             );
           })}
-            <MemoPopup
-              isOpen={!!selectedMemo}
-              memoText={selectedMemo?.content || ''}
-              author={selectedMemo?.author || ''}
-              bgNum={selectedMemo?.bgNum}
-              onClose={() => setSelectedMemo(null)}
-            />
+          <MemoPopup
+            isOpen={!!selectedMemo}
+            memoText={selectedMemo?.content || ''}
+            author={selectedMemo?.author || ''}
+            bgNum={selectedMemo?.bgNum}
+            onClose={() => setSelectedMemo(null)}
+          />
         </MemoGrid>
+      )}
+      {errorModal && (
+        <ErrorPopup message={errorModal} onClose={() => setErrorModal(null)} />
       )}
     </BoardContainer>
   );
@@ -140,7 +154,6 @@ const BoardHeader = styled.div`
   align-content: center;
   font-size: 22px;
 `;
-
 
 const Header = styled.div`
   position: relative;
@@ -187,8 +200,8 @@ const Memo = styled.div<{ $background: string }>`
   width: 70px;
   height: 70px;
   background-image: url(${(props) => props.$background});
-  background-size: cover; 
-  background-position: center; 
+  background-size: cover;
+  background-position: center;
   background-repeat: no-repeat;
   border-radius: 5px;
 `;
@@ -196,8 +209,8 @@ const Memo = styled.div<{ $background: string }>`
 const AddButton = styled.button`
   background: transparent;
   border: 1px dashed #ccc;
-  background-color:#f0f0f0;
-  opacity : 0.5;
+  background-color: #f0f0f0;
+  opacity: 0.5;
   border-radius: 20px;
   width: 90%;
   height: 90%;

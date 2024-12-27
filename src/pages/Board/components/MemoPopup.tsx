@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import memoImages from '../../../assets/memo'; 
+import memoImages from '../../../assets/memo';
 
 interface MemoPopupProps {
   isOpen: boolean;
@@ -10,17 +10,26 @@ interface MemoPopupProps {
   bgNum?: number; // 메모 배경 이미지
 }
 
-const MemoPopup: React.FC<MemoPopupProps> = ({ isOpen, memoText, author, bgNum, onClose }) => {
+const MemoPopup: React.FC<MemoPopupProps> = ({
+  isOpen,
+  memoText,
+  author,
+  bgNum,
+  onClose,
+}) => {
   if (!isOpen) return null;
 
   const backgroundImage = bgNum !== undefined ? memoImages[bgNum]?.img : '';
 
   return (
     <Overlay onClick={onClose}>
-      <PopupContainer $background={backgroundImage} onClick={(e) => e.stopPropagation()}>
+      <PopupContainer
+        $background={backgroundImage}
+        onClick={(e) => e.stopPropagation()}
+      >
         <CloseButton onClick={onClose}>X</CloseButton>
         <MemoContent>{memoText}</MemoContent>
-        <MemoAuthor>- {author}</MemoAuthor>
+        <MemoAuthor>- {author} -</MemoAuthor>
       </PopupContainer>
     </Overlay>
   );
@@ -51,14 +60,13 @@ const PopupContainer = styled.div<{ $background: string }>`
   border-radius: 10px;
   max-width: 400px;
   text-align: center;
-  width:350px;
-  height:350px;
+  width: 350px;
+  height: 350px;
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
 `;
-
 
 const CloseButton = styled.button`
   position: absolute;
@@ -97,5 +105,5 @@ const MemoAuthor = styled.p`
   outline: none;
   background: rgba(255, 255, 255, 0);
   text-align: center;
-  color:gray;
+  color: gray;
 `;
