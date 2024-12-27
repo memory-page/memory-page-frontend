@@ -11,6 +11,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import AddIcon from '@mui/icons-material/Add';
 import MemoPopup from './MemoPopup';
+import useGetMemo from '../../../api/Board/useGetMemo';
 
 interface BoardPageProps {
   onSubmit?: () => void;
@@ -29,11 +30,25 @@ const BoardPage: React.FC<BoardPageProps> = ({ onSubmit, onAddButtonClick }) => 
   const { board_name, bg_num, memo_list } = useUserInfo();
   const location = useLocation();
   const navigate = useNavigate();
+  const getMemo = useGetMemo();
 
-  const [selectedMemo, setSelectedMemo] = useState<Memo | null>(null);
+  const [selectedMemo, setSelectedMemo] = useState<{ author: string; content: string, bgNum?: number } | null>(null);
 
-  const handleMemoClick = (memo: Memo) => {
-    setSelectedMemo(memo);
+  const handleMemoClick = async (memo_id: string)  => {
+    try {
+      const data = await getMemo(memo_id);
+      if (data) {
+        const memo = memo_list.find((m) => m.memo_id === memo_id);
+        if (memo) {
+          setSelectedMemo({
+            ...data,
+            bgNum: memo.bg_num, // 배경 이미지 URL 추가
+          });
+        }
+      }
+    } catch (error) {
+      console.error('메모 불러오기 오류:', error);
+    }
   };
 
   const closePopup = () => {
@@ -70,11 +85,11 @@ const BoardPage: React.FC<BoardPageProps> = ({ onSubmit, onAddButtonClick }) => 
           {Array.from({ length: 20 }).map((_, idx) => {
             const memo = memo_list?.find((m) => m.locate_idx === idx);
             return (
-              <MemoSlot key={idx}>
+              <MemoSlot key={memo?.memo_id || idx}> 
                 {memo ? (
                   <Memo
                     $background={memoImages[memo.bg_num]?.img}
-                    onClick={() => handleMemoClick(memo)} // 클릭 시 팝업 상태 업데이트
+                    onClick={() => memo && handleMemoClick(memo.memo_id)} // 클릭 시 팝업 상태 업데이트
                   />
                 ) : (
                   <>
@@ -94,7 +109,8 @@ const BoardPage: React.FC<BoardPageProps> = ({ onSubmit, onAddButtonClick }) => 
               isOpen={!!selectedMemo}
               memoText={selectedMemo?.content || ''}
               author={selectedMemo?.author || ''}
-              onClose={closePopup}
+              bgNum={selectedMemo?.bgNum}
+              onClose={() => setSelectedMemo(null)}
             />
         </MemoGrid>
       )}
