@@ -51,10 +51,6 @@ const BoardPage: React.FC<BoardPageProps> = ({ onSubmit, onAddButtonClick }) => 
     }
   };
 
-  const closePopup = () => {
-    setSelectedMemo(null);
-  };
-
   const isCreatePage = location.pathname.includes('/create');
   const isSelectPage = location.pathname.includes('/select');
 
