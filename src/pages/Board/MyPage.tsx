@@ -13,8 +13,6 @@ const MyPage = () => {
   const cookies = new Cookies();
   const board = useBoard();
 
-  const footerHeight = 200;
-
   const loadBoardData = async () => {
     try {
       const data = await board();
