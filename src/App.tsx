@@ -1,6 +1,5 @@
 import { Routes, Route } from 'react-router-dom';
 import { ThemeProvider } from '@mui/material';
-import GlobalStyle from './utils/GlobalStyles';
 import theme from './utils/theme';
 
 //Pages
@@ -35,7 +34,6 @@ function App(): JSX.Element {
 
   return (
     <ThemeProvider theme={theme}>
-      <GlobalStyle />
       <Routes>
         {routes.map((route) =>
           route.private ? (
