@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { ThemeProvider } from '@mui/material';
 import GlobalStyle from './utils/GlobalStyles';
@@ -32,6 +33,17 @@ function App(): JSX.Element {
     { path: `/board/memo/select/:id`, element: <SelectMemoPage /> },
     { path: `/dev`, element: <DevPage /> },
   ];
+
+  // 동적 높이 업데이트 함수
+  useEffect(() => {
+    const updateAppHeight = () => {
+      document.documentElement.style.setProperty('--app-height', `${window.innerHeight}px`);
+    };
+
+    updateAppHeight();
+    window.addEventListener('resize', updateAppHeight);
+    return () => window.removeEventListener('resize', updateAppHeight);
+  }, []);
 
   return (
     <ThemeProvider theme={theme}>
