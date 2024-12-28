@@ -10,15 +10,10 @@ const GlobalStyle = createGlobalStyle`
     font-style: normal;
   }
 
-  :root {
-    --app-height: 100%;
-  }
-
   html, body {
     font-family: 'SejongGeulggot', Arial, sans-serif;
     margin: 0;
     padding: 0;
-    height: var(--app-height); /* 동적 높이 적용 */
     width: 100%;
     overflow: hidden; /* 스크롤 방지 */
     box-sizing: border-box;
