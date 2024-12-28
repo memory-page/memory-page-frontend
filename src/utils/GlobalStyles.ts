@@ -25,10 +25,6 @@ const GlobalStyle = createGlobalStyle`
     overscroll-behavior: none; /* 스크롤 넘침 방지 */
   }
 
-  body {
-    padding-top: env(safe-area-inset-top); /* 상단 노치 영역 보정 */
-  }
-
   #root {
     display: flex;
     flex-direction: column;
