@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { ThemeProvider } from '@mui/material';
 import GlobalStyle from './utils/GlobalStyles';
@@ -33,24 +32,6 @@ function App(): JSX.Element {
     { path: `/board/memo/select/:id`, element: <SelectMemoPage /> },
     { path: `/dev`, element: <DevPage /> },
   ];
-
-  // 동적 높이 업데이트 함수
-  useEffect(() => {
-    const isIOS = (): boolean => {
-      // 'MSStream' 타입 가드로 확인
-      const hasMSStream = typeof window !== 'undefined' && 'MSStream' in window;
-      return /iPad|iPhone|iPod/.test(navigator.userAgent) && !hasMSStream;
-    };
-
-    const updateHeight = () => {
-      const appHeight = isIOS() ? '100dvh' : `${window.innerHeight}px`;
-      document.documentElement.style.setProperty('--app-height', appHeight);
-    };
-
-    updateHeight();
-    window.addEventListener('resize', updateHeight);
-    return () => window.removeEventListener('resize', updateHeight);
-  }, []);
 
   return (
     <ThemeProvider theme={theme}>
