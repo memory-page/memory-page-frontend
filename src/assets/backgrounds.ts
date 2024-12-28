@@ -5,6 +5,7 @@ import bg2 from './background/bg-2.png';
 import bg3 from './background/bg-3.png';
 import bg4 from './background/bg-4.png';
 import bg5 from './background/bg-5.png';
+import bg6 from './background/bg-6.png';
 
 const backgroundImages = [
   { img: bg0, num: 0 },
@@ -13,6 +14,7 @@ const backgroundImages = [
   { img: bg3, num: 3 },
   { img: bg4, num: 4 },
   { img: bg5, num: 5 },
+  { img: bg6, num: 6 },
 ];
 
 export default backgroundImages;
