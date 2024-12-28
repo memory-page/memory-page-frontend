@@ -15,7 +15,7 @@ const SharePage: React.FC = () => {
   const navigate = useNavigate();
   const cookies = new Cookies();
   const { id } = useUserInfo();
-  const boardLink = `https://memory-boards.vercel.app/board/${id}`;
+  const boardLink = `https://memory-page-frontend.vercel.app/board/${id}`;
   const handleSubmit = async () => {
     const token = cookies.get('access_token');
     if (!token) {
