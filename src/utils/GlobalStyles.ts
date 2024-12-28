@@ -15,6 +15,7 @@ const GlobalStyle = createGlobalStyle`
     margin: 0;
     padding: 0;
     width: 100%;
+    height: 100dvh;
     overflow: hidden; /* 스크롤 방지 */
     box-sizing: border-box;
     -webkit-font-smoothing: antialiased;
