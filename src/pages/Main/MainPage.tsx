@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Button } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import bg0 from '../../assets/background/bg-0.png';
 import Title from '../../components/Title';
 
@@ -31,6 +31,7 @@ const MainPage: React.FC = () => {
           칠판 확인하기
         </SubmitButton>
       </Footer>
+      <StyledLink to='/dev'>개발자 소개 보러가기</StyledLink>
     </MainContainer>
   );
 };
@@ -68,6 +69,12 @@ const SubmitButton = styled(Button)`
     padding: 10px;
     text-transform: none;
   }
+`;
+
+const StyledLink = styled(Link)`
+  text-decoration: none;
+  margin: 20px 5px;
+  color: white;
 `;
 
 export default MainPage;
