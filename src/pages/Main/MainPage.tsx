@@ -15,6 +15,10 @@ const MainPage: React.FC = () => {
   return (
     <MainContainer>
       <Title />
+      <BetaTestNotice>
+        2025년 1월 5일까지 진행되는 베타테스트입니다 :)<br />
+        정식 버전으로 곧 다시 찾아뵐게요. 감사합니다!
+      </BetaTestNotice>
       <Footer>
         <SubmitButton
           variant='contained'
@@ -69,6 +73,15 @@ const SubmitButton = styled(Button)`
     padding: 10px;
     text-transform: none;
   }
+`;
+
+
+const BetaTestNotice = styled.div`
+  font-size: 14px;
+  color: white; /* 흰색 텍스트 */
+  margin-top: 20px;
+  line-height: 1.5;
+  text-align: center;
 `;
 
 const StyledLink = styled(Link)`

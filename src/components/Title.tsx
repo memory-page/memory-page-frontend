@@ -13,10 +13,7 @@ const Title: React.FC = () => {
       <MainTitle to='/'>
         <WhiteText>추억의</WhiteText> <HighlightText>칠판</HighlightText>
       </MainTitle>
-      <BetaTestNotice>
-        2025년 1월 5일까지 진행되는 베타테스트입니다 :)<br />
-        정식 버전으로 곧 다시 찾아뵐게요. 감사합니다!
-      </BetaTestNotice>
+
     </Header>
   );
 };
@@ -60,12 +57,5 @@ const Sticker = styled.img`
   height: auto;
 `;
 
-const BetaTestNotice = styled.div`
-  font-size: 14px;
-  color: white; /* 흰색 텍스트 */
-  margin-top: 20px;
-  line-height: 1.5;
-  text-align: center;
-`;
 
 export default Title;
