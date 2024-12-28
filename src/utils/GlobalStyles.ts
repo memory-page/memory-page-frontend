@@ -11,7 +11,7 @@ const GlobalStyle = createGlobalStyle`
   }
 
   :root {
-    --app-height: 100%;
+    --app-height: 100vh;
   }
 
 
@@ -35,8 +35,8 @@ const GlobalStyle = createGlobalStyle`
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 100vw;
-    height: 100dvh; /* 동적 높이 */
+    width: 100%;
+    height: 100%; /* 동적 높이 */
     overflow: hidden; /* 내부 스크롤 방지 */
   }
 

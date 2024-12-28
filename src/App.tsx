@@ -36,13 +36,15 @@ function App(): JSX.Element {
 
   // 동적 높이 업데이트 함수
   useEffect(() => {
-    const updateAppHeight = () => {
-      document.documentElement.style.setProperty('--app-height', `${window.innerHeight}px`);
+    const updateHeight = () => {
+      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+      const appHeight = isIOS ? '100dvh' : `${window.innerHeight}px`;
+      document.documentElement.style.setProperty('--app-height', appHeight);
     };
 
-    updateAppHeight();
-    window.addEventListener('resize', updateAppHeight);
-    return () => window.removeEventListener('resize', updateAppHeight);
+    updateHeight();
+    window.addEventListener('resize', updateHeight);
+    return () => window.removeEventListener('resize', updateHeight);
   }, []);
 
   return (
