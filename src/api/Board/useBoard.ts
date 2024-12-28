@@ -23,6 +23,7 @@ const useBoard = () => {
         },
         params: { board_id: id }, // 필요 시 추가 파라미터
       });
+      console.log(token);
 
       const { bg_num, board_name, is_self, memo_list } = response.data.data;
 
@@ -32,6 +33,7 @@ const useBoard = () => {
       setIsSelf(is_self);
       setMemoList(memo_list); // memo_list 저장
       console.log(memo_list);
+      console.log(is_self);
       console.log(`배경 번호: ${bg_num}, 보드 이름: ${board_name}`);
       console.log(response);
       return { bg_num, board_name, is_self };
