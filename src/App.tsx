@@ -13,7 +13,7 @@ import CreateMemoPage from './pages/Board/CreateMemoPage';
 import SelectMemoPage from './pages/Board/SelectMemoPage';
 import DevPage from './pages/Dev/DevPage';
 import GlobalStyle from './utils/GlobalStyles';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 interface RouteConfig {
   element: JSX.Element;
@@ -22,13 +22,6 @@ interface RouteConfig {
 }
 
 function App(){
-  const [isReady, setIsReady] = useState(false);
-
-  useEffect(() => {
-    setIsReady(true); // 초기화 완료 후 렌더링
-  }, []);
-
-  if (!isReady) return null;
 
   const routes: RouteConfig[] = [
     { path: '/', element: <MainPage /> },
