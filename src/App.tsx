@@ -1,5 +1,4 @@
 import { Routes, Route } from 'react-router-dom';
-import styled from 'styled-components';
 import { ThemeProvider } from '@mui/material';
 import GlobalStyle from './utils/GlobalStyles';
 import theme from './utils/theme';
