@@ -114,10 +114,26 @@ const BoardPage: React.FC<BoardPageProps> = ({ onSubmit, onAddButtonClick}) => {
           {currentPageMemos.map((memo, idx) => (
             <MemoSlot key={memo.memo_id || memo.locate_idx || idx}>
               {memo.memo_id ? (
-                <Memo
-                  $background={memoImages[memo.bg_num]?.img}
-                  onClick={() => memo && handleMemoClick(memo.memo_id)}
-                />
+                <>
+                {isSelectPage ? (
+                  <>
+                    <Memo
+                      $background={memoImages[memo.bg_num]?.img}
+                      onClick={() => setErrorModal("이미 선점된 자리입니다.")}
+                    />
+                  </>
+                ) : (
+                  <>
+                    <Memo
+                      $background={memoImages[memo.bg_num]?.img}
+                      onClick={() => memo && handleMemoClick(memo.memo_id)}
+                    />
+                  </>
+                )
+
+                }
+                </>
+                
               ) : (
                 <>
                   {isSelectPage && (
