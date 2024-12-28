@@ -12,6 +12,8 @@ import MyPage from './pages/Board/MyPage';
 import CreateMemoPage from './pages/Board/CreateMemoPage';
 import SelectMemoPage from './pages/Board/SelectMemoPage';
 import DevPage from './pages/Dev/DevPage';
+import GlobalStyle from './utils/GlobalStyles';
+import { useEffect } from 'react';
 
 interface RouteConfig {
   element: JSX.Element;
@@ -31,9 +33,14 @@ function App(): JSX.Element {
     { path: `/board/memo/select/:id`, element: <SelectMemoPage /> },
     { path: `/dev`, element: <DevPage /> },
   ];
+  useEffect(()=>{
+    document.body.style.margin = '0';
+    document.body.style.padding = '0';
+  }, []);
 
   return (
     <ThemeProvider theme={theme}>
+      <GlobalStyle />
       <Routes>
         {routes.map((route) =>
           route.private ? (
