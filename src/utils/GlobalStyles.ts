@@ -23,10 +23,7 @@ const GlobalStyle = createGlobalStyle`
 
   #root {
     width: 100vw; /* 전체 화면 너비 */
-    height: 100vh;
-    @supports (-webkit-touch-callout: none) {
-      height: -webkit-fill-available;
-    }
+    height: -webkit-fill-available;
   }
 
   * {
