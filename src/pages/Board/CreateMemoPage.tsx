@@ -127,10 +127,7 @@ const BackgroundSlide = styled.div`
   position: absolute;
   bottom: 0;
   width: 100%;
-  height: 150px;
-  padding-left: 32px;
-  padding-right: 33px;
-  padding-top: 20px;
+  padding: 20px 33px;
   background: rgba(0, 0, 0, 0.6);
 
   .slick-prev {

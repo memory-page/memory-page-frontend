@@ -52,7 +52,8 @@ const CreateContainer = styled.div<{ $background: string }>`
   flex-direction: column;
   color: white;
   background-image: url(${(props) => props.$background});
-  background-size: 100% 100%; /* 화면을 꽉 채우기 */
+  background-size: 100% 100%; /* 화면을 꽉 채우기 */ 
+
   background-position: center;
   background-repeat: no-repeat;
   position: relative;
@@ -62,10 +63,7 @@ const BackgroundSlide = styled.div`
   position: absolute;
   bottom: 0;
   width: 100%;
-  height: 200px;
-  padding-left: 32px;
-  padding-right: 33px;
-  padding-top: 20px;
+  padding: 20px 33px;
   background: rgba(0, 0, 0, 0.6);
 
   .slick-prev {

@@ -57,7 +57,10 @@ function App(): JSX.Element {
 }
 const Container = styled.div`
   width: 100vw; /* 전체 화면 너비 */
-  height: 100vh; /* 전체 화면 높이 */
+  height: 100vh;
+  @supports (-webkit-touch-callout: none) {
+    height: -webkit-fill-available;
+  }
 `;
 
 export default App;
