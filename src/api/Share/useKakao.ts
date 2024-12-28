@@ -46,8 +46,8 @@ const useKakao = () => {
         imageUrl:
           'https://postfiles.pstatic.net/MjAyNDEyMjRfMzgg/MDAxNzM1MDQxMDg3Mzc2.Va74Q2iOvLEZ3DXQ-BQb4-T5vU5t0u9UShDupZ3LABkg.4ItUMG1kG_d4KMhgL7pFQCSBKGHjGPogYqCKsguOh7Ag.PNG/%EC%B6%94%EC%96%B5%EC%9D%98%EC%B9%A0%ED%8C%902.png?type=w773',
         link: {
-          mobileWebUrl: `https://memory-page-frontend.vercel.app/board/${id}`,
-          webUrl: `https://memory-page-frontend.vercel.app/board/${id}`,
+          mobileWebUrl: `https://memory-page.vercel.app/board/${id}`,
+          webUrl: `https://memory-page.vercel.app/board/${id}`,
         },
       },
     });
