@@ -28,7 +28,7 @@ interface Memo {
 }
 
 const BoardPage: React.FC<BoardPageProps> = ({ onSubmit, onAddButtonClick}) => {
-  const { board_name, bg_num, memo_list } = useUserInfo();
+  const { board_name, bg_num, memo_list, is_self } = useUserInfo();
   const location = useLocation();
   const navigate = useNavigate();
   const { getMemo, errorModal, setErrorModal } = useGetMemo();
@@ -40,6 +40,12 @@ const BoardPage: React.FC<BoardPageProps> = ({ onSubmit, onAddButtonClick}) => {
   } | null>(null);
 
   const handleMemoClick = async (memo_id: string) => {
+    if(!is_self){
+      {
+        setErrorModal("칠판 주인만 열람 가능합니다.");
+        return;
+      }
+    }
     try {
       const data = await getMemo(memo_id);
       if (data) {
