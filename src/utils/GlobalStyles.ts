@@ -16,7 +16,6 @@ const GlobalStyle = createGlobalStyle`
     padding: 0;
     width: 100%;
     height: 100dvh;
-    overflow: hidden; /* 스크롤 방지 */
     box-sizing: border-box;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -32,7 +31,6 @@ const GlobalStyle = createGlobalStyle`
     align-items: center;
     width: 100vw;
     height: 100dvh; /* 동적 높이 */
-    overflow: hidden; /* 내부 스크롤 방지 */
   }
 
   * {
