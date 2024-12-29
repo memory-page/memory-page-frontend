@@ -40,7 +40,7 @@ const useInstagram = () => {
     // 링크 클립보드 복사
     copyToClipboard(shareUrl);
 
-    const instagramUrl = `instagram-stories://share?source_application=com.your.app&background_color=${backgroundColor}&sticker_image_url=${encodeURIComponent(
+    const instagramUrl = `instagram-stories://share?source_application=com.your.app&background_color=${encodeURIComponent(
       backgroundColor
     )}&sticker_image_url=${encodeURIComponent(stickerUrl)}`;
 
