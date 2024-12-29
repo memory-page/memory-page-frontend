@@ -41,8 +41,8 @@ const useInstagram = () => {
     copyToClipboard(shareUrl);
 
     const instagramUrl = `instagram-stories://share?source_application=com.your.app&background_color=${backgroundColor}&sticker_image_url=${encodeURIComponent(
-      stickerUrl
-    )}`;
+      backgroundColor
+    )}&sticker_image_url=${encodeURIComponent(stickerUrl)}`;
 
     // 모바일 환경에서 URL로 이동
     window.location.href = instagramUrl;
