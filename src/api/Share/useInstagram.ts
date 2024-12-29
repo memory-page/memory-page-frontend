@@ -4,6 +4,7 @@ const useInstagram = () => {
     if (navigator.clipboard && window.isSecureContext) {
       return navigator.clipboard.writeText(text).then(() => {
         alert('공유 링크가 복사되었습니다. 스토리에 붙여넣기 해주세요!');
+        console.log('navigator 방식 복사');
       });
     } else {
       // execCommand 방식 (구형 브라우저 호환)
@@ -17,6 +18,7 @@ const useInstagram = () => {
 
       try {
         document.execCommand('copy');
+        console.log('execCommand 방식 복사');
         alert('공유 링크가 복사되었습니다. 스토리에 붙여넣기 해주세요!');
       } catch (err) {
         console.error('링크 복사 실패:', err);
