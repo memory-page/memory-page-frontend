@@ -1,18 +1,22 @@
 import React, { useState } from 'react';
-import styled, { keyframes } from 'styled-components';
-import useUserInfo from '../../../store/UserInfo';
-import backgroundImages from '../../../assets/backgrounds';
-import memoImages from '../../../assets/memo';
+import styled from 'styled-components';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { motion, AnimatePresence, Variants } from "framer-motion";
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faCircleCheck,
   faCircleXmark,
 } from '@fortawesome/free-solid-svg-icons';
 import AddIcon from '@mui/icons-material/Add';
+
+import useUserInfo from '../../../store/UserInfo';
+import backgroundImages from '../../../assets/backgrounds';
+import memoImages from '../../../assets/memo';
 import MemoPopup from './MemoPopup';
 import useGetMemo from '../../../api/Board/useGetMemo';
 import ErrorPopup from './ErrorPopup';
+
 
 interface BoardPageProps {
   onSubmit?: () => void;
@@ -28,6 +32,18 @@ interface Memo {
 }
 const ITEMS_PER_PAGE = 16; // 한 페이지에 표시할 메모 수
 const TOTAL_PAGES = 10; // 총 페이지 수
+type Direction = "next" | "prev"; // 방향 타입 정의
+
+
+const slideVariants: Variants = {
+  enter: (direction: Direction) => ({
+    x: direction === "next" ? "100%" : "-100%",
+  }),
+  center: { x: 0 },
+  exit: (direction: Direction) => ({
+    x: direction === "next" ? "-100%" : "100%",
+  }),
+};
 
 const BoardPage: React.FC<BoardPageProps> = ({ onSubmit, onAddButtonClick}) => {
   const { board_name, bg_num, memo_list, is_self } = useUserInfo();
@@ -36,8 +52,7 @@ const BoardPage: React.FC<BoardPageProps> = ({ onSubmit, onAddButtonClick}) => {
   const { getMemo, errorModal, setErrorModal } = useGetMemo();
   const [currentPage, setCurrentPage] = useState(0); // 현재 페이지 상태
   const totalPages = TOTAL_PAGES; // 총 페이지 수
-
-
+  const [currentDirection, setCurrentDirection] = useState<Direction>("next");
   const [selectedMemo, setSelectedMemo] = useState<{
     author: string;
     content: string;
@@ -76,6 +91,10 @@ const BoardPage: React.FC<BoardPageProps> = ({ onSubmit, onAddButtonClick}) => {
     return <div>배경 이미지를 로드할 수 없습니다.</div>;
   }
 
+  const handlePageChange = (newPage: number, direction: Direction) => {
+    setCurrentDirection(direction);
+    setCurrentPage(newPage);
+  };
   const startIdx = currentPage * ITEMS_PER_PAGE;
   const currentPageMemos: Memo[] = Array.from({ length: ITEMS_PER_PAGE }).map((_, idx) => {
     const locateIdx = startIdx + idx;
@@ -110,28 +129,48 @@ const BoardPage: React.FC<BoardPageProps> = ({ onSubmit, onAddButtonClick}) => {
           {board_name} 님의 <span style={{ color: 'green' }}>추억 칠판</span>
         </BoardHeader>
       )}
+
       {!isCreatePage && (
       <>
-        <MemoGrid>
-          {currentPageMemos.map((memo, idx) => (
-            <MemoSlot key={memo.memo_id || memo.locate_idx || idx}>
-              {memo.memo_id ? (
-                <Memo $background={memoImages[memo.bg_num]?.img} onClick={() => memo && handleMemoClick(memo.memo_id)}/>
-              ) : (
-                isSelectPage && (
-                  <AddButton onClick={() => onAddButtonClick?.(memo.locate_idx)}>
-                    <AddIcon fontSize="large" />
-                  </AddButton>
-                )
-              )}
-            </MemoSlot>
-          ))}
-        </MemoGrid>
+        <SlideWrapper>
+          <AnimatePresence custom={currentDirection}>
+            <motion.div
+              key={currentPage}
+              custom={currentDirection}
+              variants={slideVariants}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              transition={{ duration: 0.5 }}
+              style={{
+                position: "absolute",
+                width: "100%",
+                height: "100%",
+              }}
+            >
+              <MemoGrid>
+                {currentPageMemos.map((memo, idx) => (
+                  <MemoSlot key={memo.memo_id || memo.locate_idx || idx}>
+                    {memo.memo_id ? (
+                      <Memo $background={memoImages[memo.bg_num]?.img} onClick={() => memo && handleMemoClick(memo.memo_id)}/>
+                    ) : (
+                      isSelectPage && (
+                        <AddButton onClick={() => onAddButtonClick?.(memo.locate_idx)}>
+                          <AddIcon fontSize="large" />
+                        </AddButton>
+                      )
+                    )}
+                  </MemoSlot>
+                ))}
+              </MemoGrid>
+            </motion.div>
+          </AnimatePresence>
+        </SlideWrapper>
         
         <PaginationControls>
           <ArrowButton
             disabled={currentPage === 0}            
-            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 0))}
+            onClick={() => handlePageChange(currentPage - 1, "prev")}
           >
             &lt; 이전
           </ArrowButton>
@@ -142,8 +181,7 @@ const BoardPage: React.FC<BoardPageProps> = ({ onSubmit, onAddButtonClick}) => {
           </PaginationIndicators>
           <ArrowButton
             disabled={currentPage === totalPages - 1}
-            onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages - 1))}
-
+            onClick={() => handlePageChange(currentPage + 1, "next")}
           >
             다음 &gt;
           </ArrowButton>
@@ -254,6 +292,7 @@ const AddButton = styled.button`
 `;
 
 const PaginationControls = styled.div`
+  align-items: center;
   display: flex;
   justify-content: space-between;
   width: 100%;
@@ -263,8 +302,6 @@ const PaginationControls = styled.div`
 const PaginationIndicators = styled.div`
   display: flex;
   gap: 5px;
-  justify-content: center;
-  align-items: center;
 `;
 
 const Indicator = styled.div<{ active: boolean }>`
@@ -292,35 +329,7 @@ const ArrowButton = styled.button`
 
 const SlideWrapper = styled.div`
   position: relative;
-  width: 100%;
-  height: 60%;
   overflow: hidden;
-`;
-
-const SlideContainer = styled.div<{ direction: "left" | "right"; animate: boolean; isCurrent: boolean }>`
-  position: absolute;
-  top: 0;
-  left: ${(props) => (props.isCurrent ? "0" : props.direction === "left" ? "-100%" : "100%")};
   width: 100%;
-  height: 100%;
-  transition: ${(props) => (props.animate ? "left 0.5s ease-in-out" : "none")};
-`;
-
-
-const slideInLeft = keyframes`
-  from {
-    transform: translateX(100%);
-  }
-  to {
-    transform: translateX(0);
-  }
-`;
-
-const slideInRight = keyframes`
-  from {
-    transform: translateX(-100%);
-  }
-  to {
-    transform: translateX(0);
-  }
+  height: 400px;
 `;
