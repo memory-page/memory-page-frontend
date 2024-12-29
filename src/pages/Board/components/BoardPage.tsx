@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import useUserInfo from '../../../store/UserInfo';
 import backgroundImages from '../../../assets/backgrounds';
 import memoImages from '../../../assets/memo';
@@ -34,22 +34,24 @@ const BoardPage: React.FC<BoardPageProps> = ({ onSubmit, onAddButtonClick}) => {
   const location = useLocation();
   const navigate = useNavigate();
   const { getMemo, errorModal, setErrorModal } = useGetMemo();
+  const [currentPage, setCurrentPage] = useState(0); // 현재 페이지 상태
+  const totalPages = TOTAL_PAGES; // 총 페이지 수
+
 
   const [selectedMemo, setSelectedMemo] = useState<{
     author: string;
     content: string;
     bgNum?: number;
   } | null>(null);
-  const [currentPage, setCurrentPage] = useState(0); // 현재 페이지 상태
-
-  const totalPages = TOTAL_PAGES; // 총 페이지 수
 
   const handleMemoClick = async (memo_id: string) => {
+    if(isSelectPage){
+      setErrorModal("이미 선점된 자리입니다.");
+      return;
+    }
     if(!is_self){
-      {
-        setErrorModal("칠판 주인만 열람 가능합니다.");
-        return;
-      }
+      setErrorModal("칠판 주인만 열람 가능합니다.");
+      return;
     }
     try {
       const data = await getMemo(memo_id);
@@ -109,53 +111,39 @@ const BoardPage: React.FC<BoardPageProps> = ({ onSubmit, onAddButtonClick}) => {
         </BoardHeader>
       )}
       {!isCreatePage && (
-        <>
+      <>
         <MemoGrid>
           {currentPageMemos.map((memo, idx) => (
             <MemoSlot key={memo.memo_id || memo.locate_idx || idx}>
               {memo.memo_id ? (
-                <>
-                {isSelectPage ? (
-                  <>
-                    <Memo
-                      $background={memoImages[memo.bg_num]?.img}
-                      onClick={() => setErrorModal("이미 선점된 자리입니다.")}
-                    />
-                  </>
-                ) : (
-                  <>
-                    <Memo
-                      $background={memoImages[memo.bg_num]?.img}
-                      onClick={() => memo && handleMemoClick(memo.memo_id)}
-                    />
-                  </>
-                )
-
-                }
-                </>
-                
+                <Memo $background={memoImages[memo.bg_num]?.img} onClick={() => memo && handleMemoClick(memo.memo_id)}/>
               ) : (
-                <>
-                  {isSelectPage && (
-                    <AddButton onClick={() => onAddButtonClick?.(memo.locate_idx)}>
-                      <AddIcon fontSize="large" />
-                    </AddButton>
-                  )}
-                </>
+                isSelectPage && (
+                  <AddButton onClick={() => onAddButtonClick?.(memo.locate_idx)}>
+                    <AddIcon fontSize="large" />
+                  </AddButton>
+                )
               )}
             </MemoSlot>
           ))}
         </MemoGrid>
+        
         <PaginationControls>
           <ArrowButton
-            disabled={currentPage === 0}
+            disabled={currentPage === 0}            
             onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 0))}
           >
             &lt; 이전
           </ArrowButton>
+          <PaginationIndicators>
+            {Array.from({ length: TOTAL_PAGES }).map((_, idx) => (
+              <Indicator key={idx} active={idx === currentPage} />
+            ))}
+          </PaginationIndicators>
           <ArrowButton
             disabled={currentPage === totalPages - 1}
             onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages - 1))}
+
           >
             다음 &gt;
           </ArrowButton>
@@ -272,6 +260,21 @@ const PaginationControls = styled.div`
   padding: 1vw 3vw;
 `;
 
+const PaginationIndicators = styled.div`
+  display: flex;
+  gap: 5px;
+  justify-content: center;
+  align-items: center;
+`;
+
+const Indicator = styled.div<{ active: boolean }>`
+  width: 10px;
+  height: 10px;
+  background: ${(props) => (props.active ? "#013c24" : "#ccc")};
+  border-radius: 50%;
+  box-shadow: inset 0.5px 0.5px 0.5px 0px;
+`;
+
 const ArrowButton = styled.button`
   background: #013c24;
   color: white;
@@ -284,5 +287,40 @@ const ArrowButton = styled.button`
   &:disabled {
     background: #aaa;
     cursor: not-allowed;
+  }
+`;
+
+const SlideWrapper = styled.div`
+  position: relative;
+  width: 100%;
+  height: 60%;
+  overflow: hidden;
+`;
+
+const SlideContainer = styled.div<{ direction: "left" | "right"; animate: boolean; isCurrent: boolean }>`
+  position: absolute;
+  top: 0;
+  left: ${(props) => (props.isCurrent ? "0" : props.direction === "left" ? "-100%" : "100%")};
+  width: 100%;
+  height: 100%;
+  transition: ${(props) => (props.animate ? "left 0.5s ease-in-out" : "none")};
+`;
+
+
+const slideInLeft = keyframes`
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+`;
+
+const slideInRight = keyframes`
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
   }
 `;
